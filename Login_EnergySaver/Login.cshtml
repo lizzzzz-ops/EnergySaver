@@ -1,0 +1,181 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EnergySaver - Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #2ecc71);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @@keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-weight: bold;
+            font-size: 28px;
+            margin: 5px 0;
+        }
+
+        .energy {
+            color: #1b5e20;
+            font-weight: bold;
+        }
+
+        .saver {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .sub {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+            input:focus {
+                border-color: #2ecc71;
+                outline: none;
+            }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 10px;
+            top: 12px;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            button:hover {
+                background: #27ae60;
+            }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+            .footer a {
+                color: #2ecc71;
+                text-decoration: none;
+            }
+
+            @if (TempData["Mensaje"] != null)
+{
+    <p style="color: lightgreen; font-weight:bold;">
+        @TempData["Mensaje"]
+    </p>
+}
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- LOGO -->
+        <img src="@Url.Content("~/imagenes/logo1.png")" class="logo" />
+
+        <h1>
+            <span class="energy">Energy</span><span class="saver">Saver</span>
+        </h1>
+
+        <p class="sub">Control inteligente de energía</p>
+
+        <!-- FORM -->
+        <form method="post">
+            <input type="email" name="correo" placeholder="Correo electrónico" required />
+
+            <div class="password-container">
+                <input type="password" id="password" name="password" placeholder="Contraseña" required />
+                <span class="toggle-btn" onclick="togglePassword()">👁️</span>
+            </div>
+
+            <button type="submit">Ingresar</button>
+        </form>
+
+        <p class="error">@ViewBag.Error</p>
+
+        <div class="footer">
+            ¿No tienes cuenta?
+            <a href="/Account/Register">Registrarse</a>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        function togglePassword() {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+
+</body>
+</html>
