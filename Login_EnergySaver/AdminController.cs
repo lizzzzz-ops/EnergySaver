@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Login_EnergySaver.Data;
-using Login_EnergySaver.Models;
+using EnergySaver.Data;
+using EnergySaver.Models;
 using System.Linq;
 
 public class AdminController : Controller

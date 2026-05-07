@@ -1,0 +1,12 @@
+﻿@model Usuario
+
+<h2>Editar Usuario</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="IdUsuario" />
+    <input asp-for="Nombre" />
+    <input asp-for="Correo" />
+    <input asp-for="Password" />
+    <input asp-for="Rol" />
+    <button type="submit">Actualizar</button>
+</form>

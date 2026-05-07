@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Login_EnergySaver.Data; // ajusta si tu namespace es diferente
+using EnergySaver.Data; // ajusta si tu namespace es diferente
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Login_EnergySaver.Models;
+using EnergySaver.Models;
 
-namespace Login_EnergySaver.Data
+namespace EnergySaver.Data
 {
     public class AppDbContext : DbContext
     {

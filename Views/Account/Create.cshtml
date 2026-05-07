@@ -1,0 +1,102 @@
+﻿@model Usuario
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EnergySaver - Agregar Usuario</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #2ecc71);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            color: #2ecc71;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+            input:focus {
+                border-color: #2ecc71;
+                outline: none;
+            }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            button:hover {
+                background: #27ae60;
+            }
+
+        .btn-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- BOTÓN VOLVER -->
+    <a href="/Admin/Dashboard" class="btn-back">
+        ⬅️ Panel
+    </a>
+
+    <div class="container">
+
+        <h2>➕ Agregar Usuario</h2>
+
+        <form method="post">
+            <input asp-for="Nombre" placeholder="Nombre" required />
+            <input asp-for="Correo" placeholder="Correo" required />
+            <input asp-for="Password" placeholder="Contraseña" required />
+            <input asp-for="Rol" placeholder="Rol (Admin/Usuario)" required />
+
+            <button type="submit">Guardar</button>
+        </form>
+
+    </div>
+
+</body>
+</html>

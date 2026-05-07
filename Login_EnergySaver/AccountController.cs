@@ -1,5 +1,5 @@
-﻿using Login_EnergySaver.Data;
-using Login_EnergySaver.Models;
+﻿using EnergySaver.Data;
+using EnergySaver.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
