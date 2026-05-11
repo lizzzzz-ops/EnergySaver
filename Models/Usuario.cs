@@ -1,7 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+<<<<<<< HEAD
 namespace Login_EnergySaver.Models
+=======
+namespace EnergySaver.Models
+>>>>>>> 7065bafb3b2de88c4632b6748e8432d70a0a39bc
 {
     [Table("Usuario")]
     public class Usuario

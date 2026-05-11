@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ﻿using Login_EnergySaver.Data;
 using Login_EnergySaver.Models;
+=======
+﻿using EnergySaver.Data;
+using EnergySaver.Models;
+>>>>>>> 7065bafb3b2de88c4632b6748e8432d70a0a39bc
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
