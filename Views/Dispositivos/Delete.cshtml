@@ -1,0 +1,77 @@
+﻿@model EnergySaver.Models.Dispositivo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Dispositivo - EnergySaver</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #4a1a1a 0%, #c0392b 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+        }
+
+        .delete-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+            width: 450px;
+            text-align: center;
+            color: #333;
+        }
+
+        .btn-confirm {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .btn-cancel {
+            background-color: #bdc3c7;
+            color: #333;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            display: block;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .warning-icon {
+            font-size: 50px;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="delete-card">
+        <div class="warning-icon">⚠️</div>
+        <h2>¿Eliminar Dispositivo?</h2>
+        <p>Estás a punto de borrar: <br><strong>@Model.nombre</strong></p>
+        <p style="color: #666; font-size: 0.9em;">Esta acción no se puede deshacer.</p>
+
+        <form action="/Dispositivos/ConfirmDelete" method="post">
+            <input type="hidden" name="id_dispositivo" value="@Model.id_dispositivo" />
+            <button type="submit" class="btn-confirm">Sí, Eliminar definitivamente</button>
+            <a href="/Dispositivos/Index" class="btn-cancel">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

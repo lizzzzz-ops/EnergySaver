@@ -27,10 +27,16 @@ CREATE TABLE Cuenta (
 -- =========================
 -- TABLA: Dispositivo
 -- =========================
-CREATE TABLE Dispositivo (
-    id_dispositivo INT PRIMARY KEY,
+CREATE TABLE Dispositivos 
+(
+    id_dispositivo INT PRIMARY KEY IDENTITY(1,1),
+    nombre VARCHAR(100) NOT NULL,
+    tipo VARCHAR(100),
+    marca VARCHAR(100),
+    consumoWatts FLOAT,
     ubicacion VARCHAR(100),
-    estado VARCHAR(20)
+    estado VARCHAR(20) DEFAULT 'Activo',
+    fechaRegistro DATETIME2 DEFAULT SYSDATETIME()
 );
 
 -- =========================

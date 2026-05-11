@@ -1,0 +1,160 @@
+﻿@model List<EnergySaver.Models.Dispositivo>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Dispositivos - EnergySaver</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #1a4a31 0%, #28b463 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Tarjeta de la Tabla */
+        .table-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow-x: auto; /* Para que sea responsiva */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #333;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #2ecc71;
+            padding: 15px;
+            border-bottom: 2px solid #eee;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background-color: #f1fdf4;
+        }
+
+        /* Botones */
+        .btn-add {
+            background-color: #2ecc71;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+            .btn-add:hover {
+                background-color: #27ae60;
+            }
+
+        .btn-back {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 1px solid white;
+            margin-right: 10px;
+        }
+
+        /* Badge de Estado */
+        .badge {
+            background-color: #2ecc71;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-flex">
+            <div>
+                <a href="/Admin/Dashboard" class="btn-back">⬅ Panel</a>
+                <h2 style="display:inline-block;">📋 Lista de Dispositivos</h2>
+            </div>
+            <a href="/Dispositivos/Create" class="btn-add">+ Agregar Nuevo</a>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Marca</th>
+                        <th>Consumo (W)</th>
+                        <th>Ubicación</th>
+                        <th>Estado</th>
+                        <th>Registro</th></tr>
+                <th>Acciones</th> </tr>
+                </thead>
+                <tbody>
+                    @foreach (var d in Model)
+                    {
+                        <tr>
+                            <td><strong>#@d.id_dispositivo</strong></td>
+                            <td>@d.nombre</td>
+                            <td>@d.tipo</td>
+                            <td>@d.marca</td>
+                            <td>@d.consumoWatts W</td>
+                            <td>@d.ubicacion</td>
+                            <td>
+                                <span class="badge">@d.estado</span>
+                            </td>
+                            <td style="font-size: 0.85em; color: #666;">
+                                @d.fechaRegistro.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td>
+                                <a href="/Dispositivos/Edit/@d.id_dispositivo" style="color: #2ecc71; text-decoration: none; font-weight: bold;">✏️ Editar</a>
+
+                                <a href="/Dispositivos/Delete/@d.id_dispositivo" style="color: #e74c3c; text-decoration: none; font-weight: bold;">🗑️ Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
