@@ -1,0 +1,172 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EnergySaver - Admin</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #2ecc71);
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-inicio {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 80%;
+            margin: 30px auto;
+        }
+
+        .accordion {
+            background: white;
+            color: black;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            outline: none;
+            text-align: left;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+            .accordion:hover {
+                background: #dff5e1;
+            }
+
+        .panel {
+            display: none;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 0 0 10px 10px;
+        }
+
+            .panel a {
+                display: block;
+                margin: 5px 0;
+                color: #2ecc71;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+                .panel a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+
+<body>
+
+    <a href="/Account/Login" class="btn-inicio">⬅️ Inicio</a>
+
+    <h1>⚡ Panel Administrador</h1>
+
+    <div class="container">
+
+        <!-- USUARIOS -->
+        <button class="accordion">👥 Gestión de Usuarios</button>
+        <div class="panel">
+            <a href="/Admin/Usuarios">📋 Ver usuarios</a>
+            <a href="/Admin/Create">➕ Crear usuario</a>
+            <a href="#">✏️ Editar usuario</a>
+            <a href="#">❌ Eliminar usuario</a>
+            <a href="#">🔑 Resetear contraseña</a>
+        </div>
+
+        <!-- DISPOSITIVOS -->
+        <button class="accordion">💡 Gestión de Dispositivos</button>
+        <div class="panel">
+            <a href="#">➕ Agregar dispositivo</a>
+            <a href="#">📋 Ver dispositivos</a>
+            <a href="#">✏️ Editar dispositivo</a>
+            <a href="#">❌ Eliminar dispositivo</a>
+        </div>
+
+        <!-- CONFIGURACIÓN -->
+        <button class="accordion">⚙️ Configuración del Sistema</button>
+        <div class="panel">
+            <a href="#">💰 Cambiar tarifa CFE</a>
+            <a href="#">🧾 Impuestos</a>
+            <a href="#">🕒 Horarios</a>
+        </div>
+
+        <!-- REGLAS -->
+        <button class="accordion">📏 Límites y Reglas</button>
+        <div class="panel">
+            <a href="#">⚡ Limitar consumo</a>
+            <a href="#">❄️ Apagar clima automático</a>
+        </div>
+
+        <!-- REPORTES -->
+        <button class="accordion">📊 Reportes Globales</button>
+        <div class="panel">
+            <a href="#">📈 Ver consumo total</a>
+            <a href="#">📅 Comparar meses</a>
+            <a href="#">📤 Exportar a Excel</a>
+        </div>
+
+        <!-- BITÁCORA -->
+        <button class="accordion">📜 Logs / Bitácora</button>
+        <div class="panel">
+            <a href="#">🔍 Ver actividad</a>
+            <a href="#">🔐 Intentos de login</a>
+        </div>
+
+        <!-- MANTENIMIENTO -->
+        <button class="accordion">🛠️ Mantenimiento</button>
+        <div class="panel">
+            <a href="#">🔄 Reiniciar sistema</a>
+            <a href="#">📡 Medidores</a>
+            <a href="#">⬆️ Actualizar sistema</a>
+        </div>
+
+        <!-- ALERTAS -->
+        <button class="accordion">🚨 Alertas Admin</button>
+        <div class="panel">
+            <a href="#">⚠️ Ver alertas</a>
+            <a href="#">📡 Fallas técnicas</a>
+        </div>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+
+                var panel = this.nextElementSibling;
+
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
