@@ -1,119 +1,116 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-<<<<<<< HEAD
-using Login_EnergySaver.Data;
-using Login_EnergySaver.Models;
-using System.Linq;
-=======
+using EnergySaver.Data;
 using EnergySaver.Models;
 using System.Linq;
-using EnergySaver.Data;
->>>>>>> 7065bafb3b2de88c4632b6748e8432d70a0a39bc
 
-public class AdminController : Controller
+namespace EnergySaver.Controllers
 {
-    private readonly AppDbContext _context;
-
-    public AdminController(AppDbContext context)
+    public class AdminController : Controller
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
 
-    public IActionResult Dashboard()
-    {
-        return View();
-    }
-
-    public IActionResult Usuarios()
-    {
-        var lista = _context.Usuarios.ToList();
-        return View(lista);
-    }
-
-    // CREAR
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public IActionResult Create(Usuario u)
-    {
-        _context.Usuarios.Add(u);
-        _context.SaveChanges();
-
-        TempData["Success"] = "Usuario creado correctamente ✅";
-
-        return RedirectToAction("Usuarios");
-    }
-
-    // EDITAR (GET)
-    public IActionResult Edit(int id)
-    {
-        var user = _context.Usuarios.Find(id);
-        return View(user);
-    }
-
-    // EDITAR (POST)
-    [HttpPost]
-    public IActionResult Edit(Usuario u)
-    {
-        var user = _context.Usuarios.Find(u.IdUsuario);
-
-        if (user != null)
+        public AdminController(AppDbContext context)
         {
-            user.Nombre = u.Nombre;
-            user.Correo = u.Correo;
-            user.Rol = u.Rol;
+            _context = context;
+        }
 
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        public IActionResult Usuarios()
+        {
+            var lista = _context.Usuarios.ToList();
+            return View(lista);
+        }
+
+        // CREAR
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Usuario u)
+        {
+            _context.Usuarios.Add(u);
             _context.SaveChanges();
 
-            TempData["Success"] = "Usuario actualizado ✏️";
+            TempData["Success"] = "Usuario creado correctamente ✅";
+
+            return RedirectToAction("Usuarios");
         }
-        else
+
+        // EDITAR (GET)
+        public IActionResult Edit(int id)
         {
-            TempData["Error"] = "Error al actualizar ❌";
+            var user = _context.Usuarios.Find(id);
+            return View(user);
         }
 
-        return RedirectToAction("Usuarios");
-    }
-
-    // ELIMINAR
-    [HttpPost]
-    public IActionResult Eliminar(int id)
-    {
-        var user = _context.Usuarios.Find(id);
-
-        if (user != null)
+        // EDITAR (POST)
+        [HttpPost]
+        public IActionResult Edit(Usuario u)
         {
-            _context.Usuarios.Remove(user);
-            _context.SaveChanges();
-            TempData["Success"] = "Usuario eliminado correctamente ❌";
+            var user = _context.Usuarios.Find(u.IdUsuario);
+
+            if (user != null)
+            {
+                user.Nombre = u.Nombre;
+                user.Correo = u.Correo;
+                user.Rol = u.Rol;
+
+                _context.SaveChanges();
+
+                TempData["Success"] = "Usuario actualizado ✏️";
+            }
+            else
+            {
+                TempData["Error"] = "Error al actualizar ❌";
+            }
+
+            return RedirectToAction("Usuarios");
         }
-        else
+
+        // ELIMINAR
+        [HttpPost]
+        public IActionResult Eliminar(int id)
         {
-            TempData["Error"] = "Usuario no encontrado";
+            var user = _context.Usuarios.Find(id);
+
+            if (user != null)
+            {
+                _context.Usuarios.Remove(user);
+                _context.SaveChanges();
+                TempData["Success"] = "Usuario eliminado correctamente ❌";
+            }
+            else
+            {
+                TempData["Error"] = "Usuario no encontrado";
+            }
+
+            return RedirectToAction("Usuarios");
         }
 
-        return RedirectToAction("Usuarios");
-    }
-
-    // RESETEAR PASSWORD
-    public IActionResult ResetPassword(int id)
-    {
-        var user = _context.Usuarios.Find(id);
-
-        if (user != null)
+        // RESETEAR PASSWORD
+        public IActionResult ResetPassword(int id)
         {
-            user.Password = "1234";
-            _context.SaveChanges();
+            var user = _context.Usuarios.Find(id);
 
-            TempData["Success"] = "Contraseña reseteada a 1234 🔑";
-        }
-        else
-        {
-            TempData["Error"] = "Usuario no encontrado";
-        }
+            if (user != null)
+            {
+                user.Password = "1234";
+                _context.SaveChanges();
 
-        return RedirectToAction("Usuarios");
+                TempData["Success"] = "Contraseña reseteada a 1234 🔑";
+            }
+            else
+            {
+                TempData["Error"] = "Usuario no encontrado";
+            }
+
+            return RedirectToAction("Usuarios");
+        }
     }
 }

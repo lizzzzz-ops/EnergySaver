@@ -1,24 +1,35 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EnergySaver.Models // <--- ESTO ES LO QUE TE FALTA
+namespace EnergySaver.Models
 {
+    [Table("Dispositivos")]
     public class Dispositivo
     {
         [Key]
+        [Column("id_dispositivo")]
         public int id_dispositivo { get; set; }
 
-        [Required] // Esto asegura que no mandes nombres vacíos
-        public string nombre { get; set; }
+        [Column("nombre")]
+        public string nombre { get; set; } = "";
 
+        [Column("tipo")]
         public string? tipo { get; set; }
+
+        [Column("marca")]
         public string? marca { get; set; }
+
+        [Column("consumoWatts")]
         public double? consumoWatts { get; set; }
+
+        [Column("ubicacion")]
         public string? ubicacion { get; set; }
+
+        [Column("estado")]
         public string? estado { get; set; }
 
-        // Le quitamos el '?' y le ponemos un valor por defecto 
-        // para que C# nunca mande un nulo a SQL en la fecha
+        [Column("fechaRegistro")]
         public DateTime fechaRegistro { get; set; } = DateTime.Now;
     }
 }

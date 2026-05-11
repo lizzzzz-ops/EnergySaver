@@ -1,17 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using EnergySaver.Data; // ajusta si tu namespace es diferente
+using EnergySaver.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ AQUÍ VA (ANTES del Build)
+// Add services
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -19,6 +20,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseRouting();
 
 app.UseAuthorization();

@@ -1,58 +1,56 @@
-<<<<<<< HEAD
-﻿using Login_EnergySaver.Data;
-using Login_EnergySaver.Models;
-=======
-﻿using EnergySaver.Data;
+using EnergySaver.Data;
 using EnergySaver.Models;
->>>>>>> 7065bafb3b2de88c4632b6748e8432d70a0a39bc
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
-public class AccountController : Controller
+namespace EnergySaver.Controllers
 {
-    private readonly AppDbContext _context;
-
-    public AccountController(AppDbContext context)
+    public class AccountController : Controller
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
 
-    public IActionResult Login()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public IActionResult Login(string correo, string password)
-    {
-        var user = _context.Usuarios
-            .FirstOrDefault(u => u.Correo == correo && u.Password == password);
-
-        if (user != null)
+        public AccountController(AppDbContext context)
         {
-            if (user.Rol == "Admin")
-                return RedirectToAction("Dashboard", "Admin");
-            else
-                return RedirectToAction("Usuario", "Home");
+            _context = context;
         }
 
-        ViewBag.Error = "Datos incorrectos";
-        return View();
-    }
+        public IActionResult Login()
+        {
+            return View();
+        }
 
-    public IActionResult Register()
-    {
-        return View();
-    }
+        [HttpPost]
+        public IActionResult Login(string correo, string password)
+        {
+            var user = _context.Usuarios
+                .FirstOrDefault(u => u.Correo == correo && u.Password == password);
 
-    [HttpPost]
-    public IActionResult Register(Usuario u)
-    {
-        _context.Usuarios.Add(u);
-        _context.SaveChanges();
+            if (user != null)
+            {
+                if (user.Rol == "Admin")
+                    return RedirectToAction("Dashboard", "Admin");
+                else
+                    return RedirectToAction("Usuario", "Home");
+            }
 
-        TempData["Mensaje"] = "Registro exitoso ✅";
+            ViewBag.Error = "Datos incorrectos";
+            return View();
+        }
 
-        return RedirectToAction("Login");
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(Usuario u)
+        {
+            _context.Usuarios.Add(u);
+            _context.SaveChanges();
+
+            TempData["Mensaje"] = "Registro exitoso ✅";
+
+            return RedirectToAction("Login");
+        }
     }
 }

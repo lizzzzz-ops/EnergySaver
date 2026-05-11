@@ -38,6 +38,7 @@ CREATE TABLE Dispositivos
     estado VARCHAR(20) DEFAULT 'Activo',
     fechaRegistro DATETIME2 DEFAULT SYSDATETIME()
 );
+SELECT * FROM Dispositivos;
 
 -- =========================
 -- TABLA: Consumo
