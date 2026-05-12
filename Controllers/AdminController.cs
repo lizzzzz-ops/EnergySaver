@@ -25,7 +25,9 @@ namespace EnergySaver.Controllers
             return View(lista);
         }
 
+    
         // CREAR
+    
         public IActionResult Create()
         {
             return View();
@@ -43,13 +45,25 @@ namespace EnergySaver.Controllers
         }
 
         // EDITAR (GET)
+    
+
         public IActionResult Edit(int id)
         {
             var user = _context.Usuarios.Find(id);
+
+            if (user == null)
+            {
+                TempData["Error"] = "Usuario no encontrado ❌";
+                return RedirectToAction("Usuarios");
+            }
+
             return View(user);
         }
 
+    
         // EDITAR (POST)
+       
+
         [HttpPost]
         public IActionResult Edit(Usuario u)
         {
@@ -59,21 +73,25 @@ namespace EnergySaver.Controllers
             {
                 user.Nombre = u.Nombre;
                 user.Correo = u.Correo;
+                user.Password = u.Password;
                 user.Rol = u.Rol;
 
                 _context.SaveChanges();
 
-                TempData["Success"] = "Usuario actualizado ✏️";
+                TempData["Success"] = "Cambios guardados correctamente ✅";
             }
             else
             {
                 TempData["Error"] = "Error al actualizar ❌";
             }
 
-            return RedirectToAction("Usuarios");
+            return RedirectToAction("Edit", new { id = u.IdUsuario });
         }
 
+      
         // ELIMINAR
+     
+
         [HttpPost]
         public IActionResult Eliminar(int id)
         {
@@ -83,6 +101,7 @@ namespace EnergySaver.Controllers
             {
                 _context.Usuarios.Remove(user);
                 _context.SaveChanges();
+
                 TempData["Success"] = "Usuario eliminado correctamente ❌";
             }
             else
@@ -93,7 +112,10 @@ namespace EnergySaver.Controllers
             return RedirectToAction("Usuarios");
         }
 
-        // RESETEAR PASSWORD
+   
+        // RESTABLECER PASSWORD
+   
+
         public IActionResult ResetPassword(int id)
         {
             var user = _context.Usuarios.Find(id);
@@ -101,9 +123,10 @@ namespace EnergySaver.Controllers
             if (user != null)
             {
                 user.Password = "1234";
+
                 _context.SaveChanges();
 
-                TempData["Success"] = "Contraseña reseteada a 1234 🔑";
+                TempData["Success"] = "Contraseña restablecida a 1234 🔑";
             }
             else
             {

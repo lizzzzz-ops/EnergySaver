@@ -1,12 +1,200 @@
-﻿@model Usuario
+﻿@model EnergySaver.Models.Usuario
 
-<h2>Editar Usuario</h2>
+@{
+    ViewData["Title"] = "Editar Usuario";
+    Layout = null;
+}
 
-<form method="post">
-    <input type="hidden" asp-for="IdUsuario" />
-    <input asp-for="Nombre" />
-    <input asp-for="Correo" />
-    <input asp-for="Password" />
-    <input asp-for="Rol" />
-    <button type="submit">Actualizar</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Usuario</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #021114, #0b4f3a, #2ecc71);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .contenedor-edit {
+            width: 100%;
+            max-width: 620px;
+            background: rgba(255,255,255,0.93);
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+        }
+
+        .btn-regresar {
+            display: inline-block;
+            background: #0d0d0d;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            box-shadow: 0 0 12px rgba(46,204,113,0.6);
+            transition: 0.3s;
+        }
+
+            .btn-regresar:hover {
+                background: #2ecc71;
+                transform: scale(1.04);
+            }
+
+        .titulo {
+            text-align: center;
+            font-size: 28px;
+            color: #2ecc71;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .emoji {
+            font-size: 28px;
+            margin-right: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 2px solid #dcdcdc;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #2ecc71;
+                box-shadow: 0 0 10px rgba(46,204,113,0.4);
+            }
+
+        .btn-guardar {
+            width: 100%;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .btn-guardar:hover {
+                background: #27ae60;
+                transform: scale(1.02);
+            }
+
+        .alerta-exito {
+            background: #2ecc71;
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(46,204,113,0.5);
+            animation: aparecer 0.5s ease;
+        }
+
+        @@keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor-edit">
+
+        <a asp-action="Usuarios" class="btn-regresar">
+            ← Regresar
+        </a>
+
+        <h1 class="titulo">
+            <span class="emoji">✏️</span>
+            Editar Usuario
+        </h1>
+
+        @if (TempData["Success"] != null && TempData["Success"].ToString() == "Cambios guardados correctamente ✅")
+        {
+            <div class="alerta-exito">
+                ✅ Cambios guardados correctamente
+            </div>
+        }
+
+        <form asp-action="Edit">
+
+            <input type="hidden" asp-for="IdUsuario" />
+
+            <div class="form-group">
+                <label>Nombre</label>
+                <input asp-for="Nombre" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Correo</label>
+                <input asp-for="Correo" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input asp-for="Password" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Rol</label>
+                <input asp-for="Rol" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn-guardar">
+                Guardar Cambios
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

@@ -1,250 +1,399 @@
-﻿@model List<Usuario>
+﻿<style>
 
-@{
-    Layout = null;
-}
+    body {
+        background: linear-gradient(135deg, #031f1b, #2ecc71);
+        min-height: 100vh;
+        font-family: 'Segoe UI', sans-serif;
+        overflow-x: hidden;
+    }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Gestión de Usuarios</title>
+    /* QUITA BARRAS BLANCAS */
+    header,
+    nav,
+    .navbar,
+    footer {
+        display: none !important;
+    }
 
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0f2027, #2ecc71);
-        }
+    .contenedor-usuarios {
+        background: rgba(255,255,255,0.88);
+        backdrop-filter: blur(12px);
+        border-radius: 30px;
+        padding: 28px;
+        margin-top: 35px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
 
-        .container {
-            width: 85%;
-            margin: 30px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-        }
+    .titulo {
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        color: #2ecc71;
+        margin-bottom: 30px;
+    }
 
-        h2 {
-            text-align: center;
-            color: #2ecc71;
-        }
+    .btn-panel {
+        background: #111;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 16px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        border: 2px solid #2ecc71;
+        box-shadow: 0 0 15px rgba(46,204,113,0.5);
+        transition: 0.3s;
+    }
 
-        .btn {
-            padding: 8px 12px;
-            border-radius: 6px;
-            color: white;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-add {
+        .btn-panel:hover {
             background: #2ecc71;
+            color: black;
+            text-decoration: none;
+            transform: scale(1.05);
         }
 
-        .btn-edit {
-            background: #3498db;
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    thead {
+        background: #2ecc71;
+        color: white;
+    }
+
+        thead th {
+            padding: 14px;
+            font-size: 15px;
         }
 
-        .btn-delete {
-            background: #e74c3c;
+    tbody tr {
+        background: rgba(255,255,255,0.6);
+        transition: 0.3s;
+    }
+
+        tbody tr:hover {
+            background: rgba(255,255,255,0.9);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+    tbody td {
+        padding: 14px;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    .acciones-container {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .btn-accion {
+        border: none;
+        padding: 8px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: white;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-editar {
+        background: #3498db;
+        text-decoration: none;
+    }
+
+    .btn-eliminar {
+        background: #e74c3c;
+    }
+
+    .btn-reset {
+        background: #2ecc71;
+    }
+
+    .btn-accion:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+
+    .iconito {
+        width: 22px;
+        height: 22px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+    /* MODALES */
+
+    .modal-custom {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.82);
+        overflow-y: auto;
+    }
+
+    .modal-image-content {
+        width: 420px;
+        margin: 40px auto;
+        text-align: center;
+        animation: aparecer 0.3s ease;
+    }
+
+    .alert-image {
+        width: 100%;
+        border-radius: 25px;
+        display: block;
+        box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+
+    .custom-buttons {
+        margin-top: 18px;
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .btn-confirmar {
+        background: #2ecc71;
+        color: black;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-cancelar {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .btn-confirmar:hover,
+        .btn-cancelar:hover {
+            transform: scale(1.05);
         }
 
-        th {
-            background: #2ecc71;
-            color: white;
-            padding: 10px;
+    @@keyframes aparecer {
+
+        from {
+            opacity: 0;
+            transform: scale(0.8);
         }
 
-        td {
-            padding: 10px;
-            text-align: center;
+        to {
+            opacity: 1;
+            transform: scale(1);
         }
+    }
 
-        tr:nth-child(even) {
-            background: #f2f2f2;
-        }
+</style>
 
-        .alert-success {
-            background: #2ecc71;
-            color: white;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
+<div class="container">
 
-        .alert-error {
-            background: #e74c3c;
-            color: white;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
+    <div class="contenedor-usuarios">
 
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-        }
+        <a href="/Admin/Dashboard" class="btn-panel">
+            ← Panel
+        </a>
 
-        .modal-content {
-            background: white;
-            padding: 20px;
-            margin: 10% auto;
-            width: 300px;
-            border-radius: 10px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-
-        <h2>⚡ Gestión de Usuarios</h2>
-
-        <a href="/Admin/Dashboard" class="btn btn-add">⬅️ Panel</a>
-
-        <!-- ALERTAS -->
-        @if (TempData["Success"] != null)
-        {
-            <div class="alert-success">@TempData["Success"]</div>
-        }
-
-        @if (TempData["Error"] != null)
-        {
-            <div class="alert-error">@TempData["Error"]</div>
-        }
+        <h1 class="titulo">
+            👥 Gestión de Usuarios
+        </h1>
 
         <table>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-            </tr>
 
-            @foreach (var u in Model)
-            {
+            <thead>
+
                 <tr>
-                    <td>@u.IdUsuario</td>
-                    <td>@u.Nombre</td>
-                    <td>@u.Correo</td>
-                    <td>@u.Rol</td>
-                    <td>
 
-                        <!-- EDITAR -->
-                        <button class="btn btn-edit"
-                                data-id="@u.IdUsuario"
-                                data-nombre="@u.Nombre"
-                                data-correo="@u.Correo"
-                                data-rol="@u.Rol"
-                                onclick="abrirModal(this)">
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
 
-                            ✏️
-
-                            ✏️Editar 
-                        </button>
-
-                        <!-- ELIMINAR -->
-                        <form method="post" action="/Admin/Eliminar"
-                              style="display:inline;"
-                              onsubmit="return confirmarEliminar();">
-
-                            <input type="hidden" name="id" value="@u.IdUsuario" />
-
-                            <button type="submit" class="btn btn-delete">
-
-                                ❌
-
-                                ❌ Eliminar 
-
-                            </button>
-
-                        </form>
-
-                        <!-- RESET -->
-                        <button class="btn btn-add"
-                                onclick="resetearPassword(@u.IdUsuario)">
-
-                            🔑
-                        </button>
-
-                            🔑  Resetear
-
-                    </td>
                 </tr>
-            }
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.IdUsuario</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Correo</td>
+                        <td>@item.Rol</td>
+
+                        <td>
+
+                            <div class="acciones-container">
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.IdUsuario"
+                                   class="btn-accion btn-editar">
+
+                                    Editar
+
+                                </a>
+
+                                <button class="btn-accion btn-eliminar"
+                                        onclick="abrirEliminar('@item.IdUsuario')">
+
+                                    <img src="/imagenes/delete.png"
+                                         class="iconito" />
+
+                                    Eliminar
+
+                                </button>
+
+                                <button class="btn-accion btn-reset"
+                                        onclick="abrirReset('@item.IdUsuario')">
+
+                                    <img src="/imagenes/reset.png"
+                                         class="iconito" />
+
+                                    Restablecer contraseña
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
         </table>
 
     </div>
 
-    <!-- MODAL -->
-    <div class="modal" id="modalEditar">
-        <div class="modal-content">
+</div>
 
-            <h3>Editar Usuario</h3>
+<!-- MODAL ELIMINAR -->
 
-            <form method="post" action="/Admin/Edit">
+<div id="modalEliminar" class="modal-custom">
 
-                <input type="hidden" id="idUsuario" name="IdUsuario" />
+    <div class="modal-image-content">
 
-                <input id="nombre" name="Nombre" placeholder="Nombre" required />
-                <input id="correo" name="Correo" placeholder="Correo" required />
+        <img src="/imagenes/delete-alert.png"
+             class="alert-image" />
 
-                <select id="rol" name="Rol">
-                    <option value="Usuario">Usuario</option>
-                    <option value="Admin">Admin</option>
-                </select>
+        <div class="custom-buttons">
 
-                <button type="submit" class="btn btn-edit">Guardar</button>
-                <button type="button" onclick="cerrarModal()">Cancelar</button>
+            <a id="btnEliminarConfirmar"
+               class="btn-confirmar">
 
-            </form>
+                Aceptar
+
+            </a>
+
+            <button class="btn-cancelar"
+                    onclick="cerrarModal('modalEliminar')">
+
+                Cancelar
+
+            </button>
 
         </div>
+
     </div>
 
-    <script>
+</div>
 
-        function abrirModal(btn) {
-            document.getElementById("modalEditar").style.display = "block";
+<!-- MODAL RESET -->
 
-            document.getElementById("idUsuario").value = btn.getAttribute("data-id");
-            document.getElementById("nombre").value = btn.getAttribute("data-nombre");
-            document.getElementById("correo").value = btn.getAttribute("data-correo");
-            document.getElementById("rol").value = btn.getAttribute("data-rol");
+<div id="modalReset" class="modal-custom">
+
+    <div class="modal-image-content">
+
+        <img src="/imagenes/reset-alert.png"
+             class="alert-image" />
+
+        <div class="custom-buttons">
+
+            <a id="btnResetConfirmar"
+               class="btn-confirmar">
+
+                Aceptar
+
+            </a>
+
+            <button class="btn-cancelar"
+                    onclick="cerrarModal('modalReset')">
+
+                Cancelar
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    function abrirEliminar(id) {
+
+        document.getElementById("modalEliminar").style.display = "block";
+
+        document.getElementById("btnEliminarConfirmar")
+            .href = "/Admin/Eliminar/" + id;
+    }
+
+    function abrirReset(id) {
+
+        document.getElementById("modalReset").style.display = "block";
+
+        document.getElementById("btnResetConfirmar")
+            .href = "/Admin/ResetPassword/" + id;
+    }
+
+    function cerrarModal(id) {
+
+        document.getElementById(id).style.display = "none";
+    }
+
+    window.onclick = function (event) {
+
+        let modalEliminar = document.getElementById("modalEliminar");
+        let modalReset = document.getElementById("modalReset");
+
+        if (event.target == modalEliminar) {
+
+            modalEliminar.style.display = "none";
         }
 
-        function cerrarModal() {
-            document.getElementById("modalEditar").style.display = "none";
+        if (event.target == modalReset) {
+
+            modalReset.style.display = "none";
         }
+    }
 
-        function confirmarEliminar() {
-            return confirm("⚠️ ¿Seguro que quieres eliminar este usuario?");
-        }
-
-        function resetearPassword(id) {
-            if (confirm("¿Resetear contraseña a 1234?")) {
-                window.location.href = "/Admin/ResetPassword/" + id;
-            }
-        }
-
-    </script>
-
-</body>
-</html>
+</script>
