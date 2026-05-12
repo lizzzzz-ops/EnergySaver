@@ -1,4 +1,6 @@
-﻿<style>
+﻿@model IEnumerable<EnergySaver.Models.Usuario>
+
+<style>
 
     body {
         background: linear-gradient(135deg, #031f1b, #2ecc71);
@@ -7,7 +9,7 @@
         overflow-x: hidden;
     }
 
-    /* QUITA BARRAS BLANCAS */
+    /* QUITAR BARRAS */
     header,
     nav,
     .navbar,
@@ -29,7 +31,7 @@
         font-size: 30px;
         font-weight: bold;
         color: #2ecc71;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
     }
 
     .btn-panel {
@@ -48,9 +50,51 @@
         .btn-panel:hover {
             background: #2ecc71;
             color: black;
-            text-decoration: none;
             transform: scale(1.05);
         }
+
+    /* ALERTAS */
+
+    .alerta-success {
+        width: 420px;
+        margin: 0 auto 20px auto;
+        padding: 14px;
+        background: linear-gradient(135deg,#2ecc71,#27ae60);
+        color: white;
+        text-align: center;
+        border-radius: 15px;
+        font-size: 15px;
+        font-weight: 600;
+        box-shadow: 0 0 20px rgba(46,204,113,0.5);
+        animation: aparecerAlerta 0.5s ease;
+    }
+
+    .alerta-error {
+        width: 420px;
+        margin: 0 auto 20px auto;
+        padding: 14px;
+        background: linear-gradient(135deg,#ff4d4d,#c0392b);
+        color: white;
+        text-align: center;
+        border-radius: 15px;
+        font-size: 15px;
+        font-weight: 600;
+        box-shadow: 0 0 20px rgba(255,0,0,0.4);
+        animation: aparecerAlerta 0.5s ease;
+    }
+
+    @@keyframes aparecerAlerta {
+
+        from {
+            opacity: 0;
+            transform: translateY(-15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
     table {
         width: 100%;
@@ -102,6 +146,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
+        cursor: pointer;
     }
 
     .btn-editar {
@@ -174,7 +219,6 @@
         font-weight: bold;
         cursor: pointer;
         transition: 0.3s;
-        text-decoration: none;
     }
 
     .btn-cancelar {
@@ -221,18 +265,30 @@
             👥 Gestión de Usuarios
         </h1>
 
+        @if (TempData["Success"] != null)
+        {
+            <div class="alerta-success">
+                ✅ @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alerta-error">
+                ❌ @TempData["Error"]
+            </div>
+        }
+
         <table>
 
             <thead>
 
                 <tr>
-
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Correo</th>
                     <th>Rol</th>
                     <th>Acciones</th>
-
                 </tr>
 
             </thead>
@@ -306,12 +362,22 @@
 
         <div class="custom-buttons">
 
-            <a id="btnEliminarConfirmar"
-               class="btn-confirmar">
+            <form id="formEliminar"
+                  method="post"
+                  action="/Admin/Eliminar">
 
-                Aceptar
+                <input type="hidden"
+                       id="idEliminar"
+                       name="id" />
 
-            </a>
+                <button type="submit"
+                        class="btn-confirmar">
+
+                    Aceptar
+
+                </button>
+
+            </form>
 
             <button class="btn-cancelar"
                     onclick="cerrarModal('modalEliminar')">
@@ -363,8 +429,7 @@
 
         document.getElementById("modalEliminar").style.display = "block";
 
-        document.getElementById("btnEliminarConfirmar")
-            .href = "/Admin/Eliminar/" + id;
+        document.getElementById("idEliminar").value = id;
     }
 
     function abrirReset(id) {

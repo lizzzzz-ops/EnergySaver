@@ -14,20 +14,30 @@ namespace EnergySaver.Controllers
             _context = context;
         }
 
+        // =========================
+        // DASHBOARD
+        // =========================
+
         public IActionResult Dashboard()
         {
             return View();
         }
 
+        // =========================
+        // LISTA USUARIOS
+        // =========================
+
         public IActionResult Usuarios()
         {
             var lista = _context.Usuarios.ToList();
+
             return View(lista);
         }
 
-    
+        // =========================
         // CREAR
-    
+        // =========================
+
         public IActionResult Create()
         {
             return View();
@@ -36,16 +46,25 @@ namespace EnergySaver.Controllers
         [HttpPost]
         public IActionResult Create(Usuario u)
         {
-            _context.Usuarios.Add(u);
-            _context.SaveChanges();
+            try
+            {
+                _context.Usuarios.Add(u);
 
-            TempData["Success"] = "Usuario creado correctamente ✅";
+                _context.SaveChanges();
+
+                TempData["Success"] = "Usuario creado correctamente ✅";
+            }
+            catch
+            {
+                TempData["Error"] = "No se pudo crear el usuario ❌";
+            }
 
             return RedirectToAction("Usuarios");
         }
 
-        // EDITAR (GET)
-    
+        // =========================
+        // EDITAR GET
+        // =========================
 
         public IActionResult Edit(int id)
         {
@@ -54,15 +73,16 @@ namespace EnergySaver.Controllers
             if (user == null)
             {
                 TempData["Error"] = "Usuario no encontrado ❌";
+
                 return RedirectToAction("Usuarios");
             }
 
             return View(user);
         }
 
-    
-        // EDITAR (POST)
-       
+        // =========================
+        // EDITAR POST
+        // =========================
 
         [HttpPost]
         public IActionResult Edit(Usuario u)
@@ -71,26 +91,33 @@ namespace EnergySaver.Controllers
 
             if (user != null)
             {
-                user.Nombre = u.Nombre;
-                user.Correo = u.Correo;
-                user.Password = u.Password;
-                user.Rol = u.Rol;
+                try
+                {
+                    user.Nombre = u.Nombre;
+                    user.Correo = u.Correo;
+                    user.Password = u.Password;
+                    user.Rol = u.Rol;
 
-                _context.SaveChanges();
+                    _context.SaveChanges();
 
-                TempData["Success"] = "Cambios guardados correctamente ✅";
+                    TempData["Success"] = "Cambios guardados correctamente ✅";
+                }
+                catch
+                {
+                    TempData["Error"] = "Error al actualizar ❌";
+                }
             }
             else
             {
-                TempData["Error"] = "Error al actualizar ❌";
+                TempData["Error"] = "Usuario no encontrado ❌";
             }
 
             return RedirectToAction("Edit", new { id = u.IdUsuario });
         }
 
-      
+        // =========================
         // ELIMINAR
-     
+        // =========================
 
         [HttpPost]
         public IActionResult Eliminar(int id)
@@ -99,22 +126,30 @@ namespace EnergySaver.Controllers
 
             if (user != null)
             {
-                _context.Usuarios.Remove(user);
-                _context.SaveChanges();
+                try
+                {
+                    _context.Usuarios.Remove(user);
 
-                TempData["Success"] = "Usuario eliminado correctamente ❌";
+                    _context.SaveChanges();
+
+                    TempData["Success"] = "Usuario eliminado correctamente ✅";
+                }
+                catch
+                {
+                    TempData["Error"] = "No se pudo eliminar el usuario ❌";
+                }
             }
             else
             {
-                TempData["Error"] = "Usuario no encontrado";
+                TempData["Error"] = "Usuario no encontrado ❌";
             }
 
             return RedirectToAction("Usuarios");
         }
 
-   
+        // =========================
         // RESTABLECER PASSWORD
-   
+        // =========================
 
         public IActionResult ResetPassword(int id)
         {
@@ -122,15 +157,22 @@ namespace EnergySaver.Controllers
 
             if (user != null)
             {
-                user.Password = "1234";
+                try
+                {
+                    user.Password = "1234";
 
-                _context.SaveChanges();
+                    _context.SaveChanges();
 
-                TempData["Success"] = "Contraseña restablecida a 1234 🔑";
+                    TempData["Success"] = "Contraseña restablecida a 1234 🔑";
+                }
+                catch
+                {
+                    TempData["Error"] = "No se pudo restablecer la contraseña ❌";
+                }
             }
             else
             {
-                TempData["Error"] = "Usuario no encontrado";
+                TempData["Error"] = "Usuario no encontrado ❌";
             }
 
             return RedirectToAction("Usuarios");
