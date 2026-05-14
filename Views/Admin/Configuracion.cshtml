@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Configuración";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg,#031d1f,#0d5c3f,#2ecc71);
+        font-family: 'Segoe UI';
+    }
+
+    .contenedor {
+        width: 85%;
+        max-width: 700px;
+        margin: 35px auto;
+        background: rgba(255,255,255,.92);
+        padding: 30px;
+        border-radius: 25px;
+    }
+
+    .titulo {
+        text-align: center;
+        color: #2ecc71;
+        font-size: 28px;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    .opcion {
+        display: block;
+        padding: 18px;
+        margin-bottom: 15px;
+        border-radius: 18px;
+        text-decoration: none;
+        background: #f5f5f5;
+        color: #222;
+        font-size: 18px;
+        font-weight: 600;
+        transition: .3s;
+    }
+
+        .opcion:hover {
+            background: #2ecc71;
+            color: white;
+            transform: scale(1.02);
+        }
+
+</style>
+
+<div class="contenedor">
+
+    <h1 class="titulo">
+        ⚙️ Configuración del Sistema
+    </h1>
+
+    <a asp-action="Tarifa" class="opcion">
+        💰 Cambiar tarifa CFE
+    </a>
+
+    <a asp-action="Impuestos" class="opcion">
+        🧾 Impuestos
+    </a>
+
+    <a asp-action="Horarios" class="opcion">
+        🕒 Horarios
+    </a>
+
+</div>

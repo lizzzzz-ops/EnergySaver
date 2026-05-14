@@ -80,6 +80,15 @@ CREATE TABLE Reporte (
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 );
 
+CREATE TABLE Configuracion (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    TarifaCFE DECIMAL(10,2),
+    Impuesto DECIMAL(10,2),
+    HoraInicio VARCHAR(10),
+    HoraFin VARCHAR(10)
+);
+select * from Configuracion;
+
 INSERT INTO Usuario (nombre, correo, contraseña, estado)
 VALUES ('Admin', 'admin@gmail.com', '1234', 'Admin');
 
