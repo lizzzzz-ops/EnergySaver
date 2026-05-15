@@ -44,14 +44,14 @@ SELECT * FROM Dispositivos;
 -- TABLA: Consumo
 -- =========================
 CREATE TABLE Consumo (
-    id_consumo INT PRIMARY KEY,
-    id_usuario INT,
-    id_dispositivo INT,
-    fecha DATE NOT NULL,
-    valor FLOAT NOT NULL,
-    
-    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
-    FOREIGN KEY (id_dispositivo) REFERENCES Dispositivo(id_dispositivo)
+        id_consumo INT PRIMARY KEY,
+        id_usuario INT,
+        id_dispositivo INT,
+        fecha DATE NOT NULL,
+        valor FLOAT NOT NULL,
+     
+        FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
+        FOREIGN KEY (id_dispositivo) REFERENCES Dispositivo(id_dispositivo)
 );
 
 -- =========================
