@@ -35,7 +35,7 @@ namespace EnergySaver.Controllers
         }
 
         // =========================
-        // CREAR
+        // CREAR USUARIO
         // =========================
 
         public IActionResult Create()
@@ -63,7 +63,7 @@ namespace EnergySaver.Controllers
         }
 
         // =========================
-        // EDITAR GET
+        // EDITAR USUARIO GET
         // =========================
 
         public IActionResult Edit(int id)
@@ -81,7 +81,7 @@ namespace EnergySaver.Controllers
         }
 
         // =========================
-        // EDITAR POST
+        // EDITAR USUARIO POST
         // =========================
 
         [HttpPost]
@@ -116,7 +116,7 @@ namespace EnergySaver.Controllers
         }
 
         // =========================
-        // ELIMINAR
+        // ELIMINAR USUARIO
         // =========================
 
         [HttpPost]
@@ -176,6 +176,241 @@ namespace EnergySaver.Controllers
             }
 
             return RedirectToAction("Usuarios");
+        }
+
+        // =========================
+        // CONFIGURACIÓN
+        // =========================
+
+        public IActionResult Configuracion()
+        {
+            return View();
+        }
+
+        // =========================
+        // TARIFA
+        // =========================
+
+        public IActionResult Tarifa()
+        {
+            return View();
+        }
+
+        // =========================
+        // IMPUESTOS
+        // =========================
+
+        public IActionResult Impuestos()
+        {
+            return View();
+        }
+
+        // =========================
+        // HORARIOS
+        // =========================
+
+        public IActionResult Horarios()
+        {
+            return View();
+        }
+
+        // =========================
+        // GUARDAR TARIFA
+        // =========================
+
+        [HttpPost]
+        public IActionResult GuardarTarifa(decimal tarifa)
+        {
+            try
+            {
+                var config = _context.Configuracion.FirstOrDefault();
+
+                if (config == null)
+                {
+                    config = new Configuracion
+                    {
+                        TarifaCFE = tarifa,
+                        Impuesto = 0,
+                        HoraInicio = "",
+                        HoraFin = ""
+                    };
+
+                    _context.Configuracion.Add(config);
+                }
+                else
+                {
+                    config.TarifaCFE = tarifa;
+                }
+
+                _context.SaveChanges();
+
+                TempData["Success"] = "Nueva tarifa agregada exitosamente ✅";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction("Tarifa");
+        }
+
+        // =========================
+        // GUARDAR HORARIOS
+        // =========================
+
+        [HttpPost]
+        public IActionResult GuardarHorarios(string horaInicio, string horaFin)
+        {
+            try
+            {
+                var config = _context.Configuracion.FirstOrDefault();
+
+                if (config == null)
+                {
+                    config = new Configuracion
+                    {
+                        TarifaCFE = 0,
+                        Impuesto = 0,
+                        HoraInicio = horaInicio,
+                        HoraFin = horaFin
+                    };
+
+                    _context.Configuracion.Add(config);
+                }
+                else
+                {
+                    config.HoraInicio = horaInicio;
+                    config.HoraFin = horaFin;
+                }
+
+                _context.SaveChanges();
+
+                TempData["Success"] = "Nuevo horario agregado exitosamente ✅";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction("Horarios");
+        }
+
+        // =========================
+        // CONSULTAR TARIFAS
+        // =========================
+
+        public IActionResult ConsultarTarifas()
+        {
+            var datos = _context.Configuracion.ToList();
+
+            return View(datos);
+        }
+
+        // =========================
+        // CONSULTAR HORARIOS
+        // =========================
+
+        public IActionResult ConsultarHorarios()
+        {
+            var datos = _context.Configuracion.ToList();
+
+            return View(datos);
+        }
+
+        // =========================
+        // EDITAR TARIFA
+        // =========================
+
+        public IActionResult EditarTarifa(int id)
+        {
+            var tarifa = _context.Configuracion.Find(id);
+
+            return View(tarifa);
+        }
+
+        [HttpPost]
+        public IActionResult EditarTarifa(Configuracion c)
+        {
+            var tarifa = _context.Configuracion.Find(c.Id);
+
+            if (tarifa != null)
+            {
+                tarifa.TarifaCFE = c.TarifaCFE;
+
+                _context.SaveChanges();
+
+                TempData["Success"] = "Tarifa editada correctamente ✅";
+            }
+
+            return RedirectToAction("ConsultarTarifas");
+        }
+
+        // =========================
+        // ELIMINAR TARIFA
+        // =========================
+
+        public IActionResult EliminarTarifa(int id)
+        {
+            var tarifa = _context.Configuracion.Find(id);
+
+            if (tarifa != null)
+            {
+                _context.Configuracion.Remove(tarifa);
+
+                _context.SaveChanges();
+
+                TempData["Success"] = "Tarifa eliminada exitosamente ✅";
+            }
+
+            return RedirectToAction("ConsultarTarifas");
+        }
+        // =========================
+        // EDITAR HORARIO
+        // =========================
+
+        public IActionResult EditarHorario(int id)
+        {
+            var horario = _context.Configuracion.Find(id);
+
+            return View(horario);
+        }
+
+        [HttpPost]
+        public IActionResult EditarHorario(Configuracion c)
+        {
+            var horario = _context.Configuracion.Find(c.Id);
+
+            if (horario != null)
+            {
+                horario.HoraInicio = c.HoraInicio;
+                horario.HoraFin = c.HoraFin;
+
+                _context.SaveChanges();
+
+                TempData["Success"] = "Horario editado correctamente ✅";
+            }
+
+            return RedirectToAction("ConsultarHorarios");
+        }
+
+        // =========================
+        // ELIMINAR HORARIO
+        // =========================
+
+        public IActionResult EliminarHorario(int id)
+        {
+            var horario = _context.Configuracion.Find(id);
+
+            if (horario != null)
+            {
+                _context.Configuracion.Remove(horario);
+
+                _context.SaveChanges();
+
+                TempData["Success"] = "Horario eliminado exitosamente ✅";
+            }
+
+            return RedirectToAction("ConsultarHorarios");
         }
     }
 }

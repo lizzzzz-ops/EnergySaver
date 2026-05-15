@@ -1,0 +1,197 @@
+﻿@model EnergySaver.Models.Configuracion
+
+@{
+    ViewData["Title"] = "Tarifa";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alerta-success">
+        ✅ @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alerta-error">
+        ❌ @TempData["Error"]
+    </div>
+}
+
+<style>
+
+    body {
+        background: linear-gradient(135deg,#031d1f,#0d5c3f,#2ecc71);
+        font-family: 'Segoe UI';
+    }
+
+    .contenedor {
+        width: 80%;
+        max-width: 650px;
+        margin: 40px auto;
+        background: rgba(255,255,255,.95);
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .btn-inicio {
+        background: #111;
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 14px;
+        font-size: 13px;
+        font-weight: bold;
+        transition: .3s;
+        box-shadow: 0 0 10px rgba(0,0,0,.2);
+    }
+
+        .btn-inicio:hover {
+            background: #2ecc71;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    .titulo {
+        text-align: center;
+        color: #2ecc71;
+        font-size: 28px;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: block;
+        font-size: 15px;
+        color: #222;
+    }
+
+    input {
+        width: 100%;
+        padding: 14px;
+        border-radius: 15px;
+        border: 2px solid #ddd;
+        margin-bottom: 25px;
+        font-size: 15px;
+        transition: .3s;
+    }
+
+        input:focus {
+            outline: none;
+            border-color: #2ecc71;
+            box-shadow: 0 0 10px rgba(46,204,113,.4);
+        }
+
+    .botones {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        min-width: 140px;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 14px;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        transition: .3s;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+    }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+    .guardar {
+        background: #2ecc71;
+    }
+
+    .mostrar {
+        background: #9b59b6;
+    }
+
+    .alerta-success {
+        width: 80%;
+        max-width: 650px;
+        margin: 20px auto;
+        background: #2ecc71;
+        color: white;
+        padding: 14px;
+        border-radius: 14px;
+        text-align: center;
+        font-weight: bold;
+        box-shadow: 0 0 12px rgba(46,204,113,.5);
+    }
+
+    .alerta-error {
+        width: 80%;
+        max-width: 650px;
+        margin: 20px auto;
+        background: #e74c3c;
+        color: white;
+        padding: 14px;
+        border-radius: 14px;
+        text-align: center;
+        font-weight: bold;
+        box-shadow: 0 0 12px rgba(231,76,60,.5);
+    }
+
+</style>
+
+<div class="contenedor">
+
+    <div class="top-bar">
+
+        <a asp-action="Dashboard" class="btn-inicio">
+            ⬅ Inicio
+        </a>
+
+    </div>
+
+    <h1 class="titulo">
+        💰 Cambiar Tarifa CFE
+    </h1>
+
+    <form method="post" asp-action="GuardarTarifa">
+
+        <label>Tarifa actual</label>
+
+        <input type="number"
+               step="0.01"
+               name="tarifa"
+               required
+               placeholder="Ejemplo: 1.25">
+
+        <div class="botones">
+
+            <button type="submit" class="btn guardar">
+                💾 Guardar
+            </button>
+
+            <a asp-action="ConsultarTarifas"
+               class="btn mostrar">
+
+                📋 Consultar Tarifas
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>

@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Impuestos";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+    body {
+        background: linear-gradient(135deg,#031d1f,#0d5c3f,#2ecc71);
+        font-family: 'Segoe UI';
+    }
+
+    .contenedor {
+        width: 85%;
+        max-width: 950px;
+        margin: 35px auto;
+        background: rgba(255,255,255,.95);
+        border-radius: 28px;
+        padding: 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .btn-inicio {
+        background: #0f0f0f;
+        color: white;
+        text-decoration: none;
+        padding: 10px 22px;
+        border-radius: 14px;
+        font-size: 14px;
+        font-weight: bold;
+        transition: .3s;
+        box-shadow: 0 0 10px rgba(0,0,0,.2);
+    }
+
+        .btn-inicio:hover {
+            background: #2ecc71;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    .titulo {
+        text-align: center;
+        color: #2ecc71;
+        font-size: 32px;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    .grafica-box {
+        width: 500px;
+        height: 300px;
+        margin: 25px auto;
+        background: #fafafa;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,.08);
+    }
+
+    canvas {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+</style>
+
+<div class="contenedor">
+
+    <div class="top-bar">
+        <a asp-action="Dashboard" class="btn-inicio">
+            ⬅ Inicio
+        </a>
+    </div>
+
+    <h1 class="titulo">
+        🧾 Impuestos
+    </h1>
+
+    <div class="grafica-box">
+        <canvas id="graficaDiaria"></canvas>
+    </div>
+
+    <div class="grafica-box">
+        <canvas id="graficaSemanal"></canvas>
+    </div>
+
+    <div class="grafica-box">
+        <canvas id="graficaMensual"></canvas>
+    </div>
+
+</div>
+
+<script>
+
+    // GRAFICA DIARIA
+
+    new Chart(document.getElementById('graficaDiaria'), {
+        type: 'bar',
+        data: {
+            labels: ['Lun','Mar','Mie','Jue','Vie'],
+            datasets: [{
+                label: 'Impuestos diarios',
+                data: [12,19,8,15,10],
+                backgroundColor: '#2ecc71',
+                borderRadius: 10
+            }]
+        },
+        options: {
+            responsive:true,
+            maintainAspectRatio:false
+        }
+    });
+
+    // GRAFICA SEMANAL
+
+    new Chart(document.getElementById('graficaSemanal'), {
+        type: 'line',
+        data: {
+            labels: ['Semana 1','Semana 2','Semana 3','Semana 4'],
+            datasets: [{
+                label: 'Impuestos semanales',
+                data: [120,90,140,180],
+                borderColor:'#27ae60',
+                backgroundColor:'rgba(46,204,113,.2)',
+                fill:true,
+                tension:.4
+            }]
+        },
+        options: {
+            responsive:true,
+            maintainAspectRatio:false
+        }
+    });
+
+    // GRAFICA MENSUAL
+
+    new Chart(document.getElementById('graficaMensual'), {
+        type: 'pie',
+        data: {
+            labels: ['Enero','Febrero','Marzo'],
+            datasets: [{
+                data: [300,500,200],
+                backgroundColor: [
+                    '#2ecc71',
+                    '#27ae60',
+                    '#145a32'
+                ]
+            }]
+        },
+        options: {
+            responsive:true,
+            maintainAspectRatio:true
+        }
+    });
+
+</script>

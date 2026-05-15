@@ -1,0 +1,67 @@
+﻿@model EnergySaver.Models.Configuracion
+
+@{
+    ViewData["Title"] = "Editar Tarifa";
+}
+
+<style>
+
+    body {
+        background: linear-gradient(135deg,#031d1f,#0d5c3f,#2ecc71);
+        font-family: 'Segoe UI';
+    }
+
+    .contenedor {
+        width: 80%;
+        max-width: 600px;
+        margin: 40px auto;
+        background: white;
+        border-radius: 25px;
+        padding: 30px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2ecc71;
+        margin-bottom: 30px;
+    }
+
+    input {
+        width: 100%;
+        padding: 14px;
+        border-radius: 14px;
+        border: 2px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 14px;
+        background: #2ecc71;
+        color: white;
+        font-weight: bold;
+    }
+
+</style>
+
+<div class="contenedor">
+
+    <h1>
+        ✏️ Editar Tarifa
+    </h1>
+
+    <form method="post">
+
+        <input type="hidden" asp-for="Id">
+
+        <input asp-for="TarifaCFE">
+
+        <button type="submit" class="btn">
+            Guardar Cambios
+        </button>
+
+    </form>
+
+</div>

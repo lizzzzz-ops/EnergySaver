@@ -14,11 +14,17 @@ namespace EnergySaver.Controllers
             _context = context;
         }
 
+        // =========================
+        // LOGIN GET
+        // =========================
         public IActionResult Login()
         {
             return View();
         }
 
+        // =========================
+        // LOGIN POST
+        // =========================
         [HttpPost]
         public IActionResult Login(string correo, string password)
         {
@@ -33,24 +39,46 @@ namespace EnergySaver.Controllers
                     return RedirectToAction("Usuario", "Home");
             }
 
-            ViewBag.Error = "Datos incorrectos";
+            ViewBag.Error = "Correo o contraseña incorrectos, inténtelo nuevamente";
+
+            ViewBag.Correo = correo;
+
             return View();
         }
 
+        // =========================
+        // REGISTER GET
+        // =========================
         public IActionResult Register()
         {
             return View();
         }
 
+        // =========================
+        // REGISTER POST
+        // =========================
         [HttpPost]
         public IActionResult Register(Usuario u)
         {
+            // VALIDAR CORREO DUPLICADO
+            var existeCorreo = _context.Usuarios
+                .Any(x => x.Correo == u.Correo);
+
+            if (existeCorreo)
+            {
+                TempData["Error"] = "El correo ya está registrado";
+
+                return RedirectToAction("Register");
+            }
+
+            // GUARDAR USUARIO
             _context.Usuarios.Add(u);
+
             _context.SaveChanges();
 
-            TempData["Mensaje"] = "Registro exitoso ✅";
+            TempData["Success"] = "Registro exitoso";
 
-            return RedirectToAction("Login");
+            return RedirectToAction("Register");
         }
     }
 }

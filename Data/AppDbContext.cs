@@ -13,5 +13,7 @@ namespace EnergySaver.Data
         public DbSet<Usuario> Usuarios { get; set; }
 
         public DbSet<Dispositivo> Dispositivos { get; set; }
+
+        public DbSet<Configuracion> Configuracion { get; set; }
     }
 }
