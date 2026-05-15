@@ -9,7 +9,13 @@
 <head>
     <title>EnergySaver - Registro</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
     <style>
+
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
@@ -23,7 +29,7 @@
         .container {
             background: white;
             padding: 40px;
-            border-radius: 15px;
+            border-radius: 20px;
             width: 350px;
             text-align: center;
             box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
@@ -31,6 +37,7 @@
         }
 
         @@keyframes fadeIn {
+
             0% {
                 opacity: 0;
                 transform: translateY(20px);
@@ -67,18 +74,23 @@
             margin-bottom: 20px;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid #ccc;
             font-size: 14px;
+            box-sizing: border-box;
+            transition: .3s;
         }
 
-            input:focus, select:focus {
+            input:focus,
+            select:focus {
                 border-color: #2ecc71;
                 outline: none;
+                box-shadow: 0 0 10px rgba(46,204,113,.3);
             }
 
         button {
@@ -87,14 +99,17 @@
             background: #2ecc71;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
+            transition: .3s;
+            font-weight: bold;
         }
 
             button:hover {
                 background: #27ae60;
+                transform: scale(1.02);
             }
 
         .footer {
@@ -105,8 +120,35 @@
             .footer a {
                 color: #2ecc71;
                 text-decoration: none;
+                font-weight: bold;
             }
+
+        /* ALERTA ELEGANTE */
+
+        .alerta-elegante {
+            border-radius: 25px !important;
+            box-shadow: 0 0 35px rgba(46,204,113,.35) !important;
+            border: 2px solid rgba(46,204,113,.4);
+        }
+
+        .titulo-alerta {
+            font-size: 30px !important;
+            font-weight: bold !important;
+        }
+
+        .boton-alerta {
+            border-radius: 12px !important;
+            font-weight: bold !important;
+            padding: 12px 25px !important;
+            transition: .3s;
+        }
+
+            .boton-alerta:hover {
+                transform: scale(1.05);
+            }
+
     </style>
+
 </head>
 
 <body>
@@ -114,34 +156,165 @@
     <div class="container">
 
         <!-- LOGO -->
-        <img src="@Url.Content("~/imagenes/logo1.png")" class="logo" />
+        <img src="@Url.Content("~/imagenes/logo1.png")"
+             class="logo" />
 
         <h1>
-            <span class="energy">Energy</span><span class="saver">Saver</span>
+            <span class="energy">Energy</span>
+            <span class="saver">Saver</span>
         </h1>
 
-        <p class="sub">Crear cuenta</p>
+        <p class="sub">
+            Crear cuenta
+        </p>
 
         <!-- FORM -->
         <form method="post">
-            <input asp-for="Nombre" placeholder="Nombre" required />
-            <input asp-for="Correo" placeholder="Correo electrónico" required />
-            <input asp-for="Password" placeholder="Contraseña" required />
+
+            <input asp-for="Nombre"
+                   placeholder="Nombre"
+                   required />
+
+            <input asp-for="Correo"
+                   placeholder="Correo electrónico"
+                   required />
+
+            <input asp-for="Password"
+                   type="password"
+                   placeholder="Contraseña"
+                   required />
 
             <select asp-for="Rol">
-                <option value="Usuario">Usuario</option>
-                <option value="Admin">Administrador</option>
+
+                <option value="Usuario">
+                    Usuario
+                </option>
+
+                <option value="Admin">
+                    Administrador
+                </option>
+
             </select>
 
-            <button type="submit">Registrarse</button>
+            <button type="submit">
+                Registrarse
+            </button>
+
         </form>
 
         <div class="footer">
+
             ¿Ya tienes cuenta?
-            <a href="/Account/Login">Iniciar sesión</a>
+
+            <a href="/Account/Login">
+                Iniciar sesión
+            </a>
+
         </div>
 
     </div>
+
+    <!-- ALERTA SUCCESS -->
+    @if (TempData["Success"] != null)
+    {
+        <script>
+
+            Swal.fire({
+
+                title: '¡Registro exitoso!',
+
+                text: 'La cuenta fue creada correctamente',
+
+                icon: 'success',
+
+                background: '#031d1f',
+
+                color: 'white',
+
+                confirmButtonColor: '#2ecc71',
+
+                confirmButtonText: 'Aceptar',
+
+                width: '500px',
+
+                padding: '2em',
+
+                customClass: {
+
+                    popup: 'alerta-elegante',
+
+                    title: 'titulo-alerta',
+
+                    confirmButton: 'boton-alerta'
+
+                },
+
+                showClass: {
+                    popup: 'animate__animated animate__zoomIn'
+                },
+
+                hideClass: {
+                    popup: 'animate__animated animate__zoomOut'
+                }
+
+            });
+
+        </script>
+    }
+
+    <!-- ALERTA ERROR -->
+    @if (TempData["Error"] != null)
+    {
+        <script>
+
+            Swal.fire({
+
+                title: 'Correo ya registrado',
+
+                text: 'Ese correo ya existe en el sistema',
+
+                icon: 'error',
+
+                background: '#031d1f',
+
+                color: 'white',
+
+                confirmButtonColor: '#2ecc71',
+
+                confirmButtonText: 'Entendido',
+
+                width: '500px',
+
+                padding: '2em',
+
+                backdrop: `
+                    rgba(0,0,0,0.7)
+                    left top
+                    no-repeat
+                `,
+
+                customClass: {
+
+                    popup: 'alerta-elegante',
+
+                    title: 'titulo-alerta',
+
+                    confirmButton: 'boton-alerta'
+
+                },
+
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+
+            });
+
+        </script>
+    }
 
 </body>
 </html>

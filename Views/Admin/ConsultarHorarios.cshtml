@@ -79,6 +79,7 @@
         font-size: 13px;
         font-weight: bold;
         transition: .3s;
+        cursor: pointer;
     }
 
         .btn:hover {
@@ -136,9 +137,9 @@
 
                         </a>
 
-                        <a asp-action="EliminarHorario"
-                           asp-route-id="@item.Id"
-                           class="btn eliminar">
+                        <a href="#"
+                           class="btn eliminar"
+                           onclick="confirmarEliminarHorario(@item.Id)">
 
                             🗑 Eliminar
 
@@ -154,3 +155,70 @@
     </table>
 
 </div>
+
+<script>
+
+    function confirmarEliminarHorario(id){
+
+        Swal.fire({
+
+            imageUrl: '/imagenes/eliminar-horario.png',
+
+            imageWidth: 450,
+            imageHeight: 450,
+
+            background: 'transparent',
+
+            showCancelButton: true,
+
+            confirmButtonColor: '#2ecc71',
+            cancelButtonColor: '#e74c3c',
+
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar',
+
+            width: '700px',
+
+            padding: '20px',
+            customClass: {
+            popup: 'popup-transparente'
+            },
+
+            showClass: {
+                popup: 'animate__animated animate__zoomIn'
+            },
+
+            hideClass: {
+                popup: 'animate__animated animate__zoomOut'
+            }
+
+        }).then((result) => {
+
+            if(result.isConfirmed){
+
+                window.location.href =
+                '/Admin/EliminarHorario/' + id;
+            }
+
+        });
+
+    }
+
+</script>
+<style>
+
+  
+
+    .popup-transparente {
+        background: transparent !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+    }
+
+    .swal2-image {
+        border-radius: 30px !important;
+    }
+
+
+
+</style>

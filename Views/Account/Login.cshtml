@@ -8,6 +8,7 @@
     <title>EnergySaver - Login</title>
 
     <style>
+
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
@@ -29,6 +30,7 @@
         }
 
         @@keyframes fadeIn {
+
             0% {
                 opacity: 0;
                 transform: translateY(20px);
@@ -74,6 +76,7 @@
             border-radius: 8px;
             border: 1px solid #ccc;
             font-size: 14px;
+            box-sizing: border-box;
         }
 
             input:focus {
@@ -88,8 +91,9 @@
         .toggle-btn {
             position: absolute;
             right: 10px;
-            top: 12px;
+            top: 20px;
             cursor: pointer;
+            user-select: none;
         }
 
         button {
@@ -102,15 +106,19 @@
             font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
+            transition: .3s;
         }
 
             button:hover {
                 background: #27ae60;
+                transform: scale(1.02);
             }
 
         .error {
-            color: red;
-            margin-top: 10px;
+            color: #e74c3c;
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: bold;
         }
 
         .footer {
@@ -121,15 +129,11 @@
             .footer a {
                 color: #2ecc71;
                 text-decoration: none;
+                font-weight: bold;
             }
 
-            @if (TempData["Mensaje"] != null)
-{
-    <p style="color: lightgreen; font-weight:bold;">
-        @TempData["Mensaje"]
-    </p>
-}
     </style>
+
 </head>
 
 <body>
@@ -137,44 +141,87 @@
     <div class="container">
 
         <!-- LOGO -->
-        <img src="@Url.Content("~/imagenes/logo1.png")" class="logo" />
+        <img src="@Url.Content("~/imagenes/logo1.png")"
+             class="logo" />
 
         <h1>
             <span class="energy">Energy</span><span class="saver">Saver</span>
         </h1>
 
-        <p class="sub">Control inteligente de energía</p>
+        <p class="sub">
+            Control inteligente de energía
+        </p>
 
         <!-- FORM -->
         <form method="post">
-            <input type="email" name="correo" placeholder="Correo electrónico" required />
+
+            <input type="email"
+                   name="correo"
+                   value="@ViewBag.Correo"
+                   placeholder="Correo electrónico"
+                   required />
 
             <div class="password-container">
-                <input type="password" id="password" name="password" placeholder="Contraseña" required />
-                <span class="toggle-btn" onclick="togglePassword()">👁️</span>
+
+                <input type="password"
+                       id="password"
+                       name="password"
+                       placeholder="Contraseña"
+                       required />
+
+                <span class="toggle-btn"
+                      onclick="togglePassword()">
+
+                    👁️
+
+                </span>
+
             </div>
 
-            <button type="submit">Ingresar</button>
+            <button type="submit">
+                Ingresar
+            </button>
+
         </form>
 
-        <p class="error">@ViewBag.Error</p>
+        @if (ViewBag.Error != null)
+        {
+            <p class="error">
+
+                @ViewBag.Error
+
+            </p>
+        }
 
         <div class="footer">
+
             ¿No tienes cuenta?
-            <a href="/Account/Register">Registrarse</a>
+
+            <a href="/Account/Register">
+                Registrarse
+            </a>
+
         </div>
+
     </div>
 
     <!-- SCRIPT -->
     <script>
+
         function togglePassword() {
+
             var x = document.getElementById("password");
+
             if (x.type === "password") {
+
                 x.type = "text";
+
             } else {
+
                 x.type = "password";
             }
         }
+
     </script>
 
 </body>

@@ -359,7 +359,7 @@ namespace EnergySaver.Controllers
 
                 _context.SaveChanges();
 
-                TempData["Success"] = "Tarifa eliminada correctamente 🗑";
+                TempData["Success"] = "Tarifa eliminada exitosamente ✅";
             }
 
             return RedirectToAction("ConsultarTarifas");
@@ -407,7 +407,7 @@ namespace EnergySaver.Controllers
 
                 _context.SaveChanges();
 
-                TempData["Success"] = "Horario eliminado correctamente 🗑";
+                TempData["Success"] = "Horario eliminado exitosamente ✅";
             }
 
             return RedirectToAction("ConsultarHorarios");
