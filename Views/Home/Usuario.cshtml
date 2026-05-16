@@ -1,158 +1,514 @@
 ﻿@{
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EnergySaver - Usuario</title>
-
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0f2027, #2ecc71);
-            color: white;
+            padding: 0;
+            font-family: 'Segoe UI',sans-serif
         }
 
-        h1 {
-            text-align: center;
-            margin-top: 20px;
+        body {
+            background: #1a5b3e;
+            color: #fff;
+            padding: 1.5rem
         }
 
-        .btn-inicio {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: #2ecc71;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-decoration: none;
+        .header {
+            background: linear-gradient(135deg,#1e7d50,#0f4c2f);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px
         }
 
-        .container {
-            width: 80%;
-            margin: 30px auto;
+            .header h1 {
+                font-size: 22px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 8px
+            }
+
+        .nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.5rem
         }
 
-        /* BOTONES PRINCIPALES */
-        .accordion {
-            background: white;
-            color: #000; /* 🔥 TEXTO NEGRO */
-            font-weight: bold;
-            cursor: pointer;
-            padding: 15px;
-            width: 100%;
+        .nav-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
             border: none;
-            text-align: left;
-            font-size: 16px;
-            margin-top: 10px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all .2s
+        }
+
+            .nav-btn:hover {
+                background: rgba(255,255,255,0.2)
+            }
+
+            .nav-btn.active {
+                background: rgba(255,255,255,0.25)
+            }
+
+        .section {
+            display: none
+        }
+
+            .section.active {
+                display: block
+            }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            color: #000
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 12px;
+            margin-bottom: 1.5rem
+        }
+
+        .metric-card {
+            background: #fff;
             border-radius: 10px;
-            transition: 0.3s;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08)
         }
 
-            .accordion:hover {
-                background: #dff5e1;
-                color: #000;
+            .metric-card .label {
+                font-size: 13px;
+                color: #666;
+                margin-bottom: 6px
             }
 
-        /* CONTENIDO DESPLEGABLE */
-        .panel {
-            display: none;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 0 0 10px 10px;
-            color: black; /* 🔥 TEXTO NEGRO */
+            .metric-card .value {
+                font-size: 28px;
+                font-weight: 600;
+                color: #1a5b3e
+            }
+
+            .metric-card .icon {
+                font-size: 32px;
+                margin-bottom: 8px
+            }
+
+        .device-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px
         }
 
-            .panel button {
-                margin: 5px;
-                padding: 8px 12px;
-                background: #2ecc71;
-                border: none;
-                color: white;
-                border-radius: 6px;
-                cursor: pointer;
+        .device-info {
+            flex: 1
+        }
+
+        .device-name {
+            font-weight: 500;
+            font-size: 15px;
+            margin-bottom: 4px
+        }
+
+        .device-consumption {
+            font-size: 13px;
+            color: #666
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0
             }
 
-            .panel input {
-                width: 100%;
-                padding: 8px;
-                margin-top: 5px;
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ccc;
+            transition: .3s;
+            border-radius: 26px
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 20px;
+                width: 20px;
+                left: 3px;
+                bottom: 3px;
+                background: #fff;
+                transition: .3s;
+                border-radius: 50%
             }
 
+        input:checked + .slider {
+            background: #1a5b3e
+        }
+
+            input:checked + .slider:before {
+                transform: translateX(24px)
+            }
+
+        .chart-container {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: 280px;
+            position: relative
+        }
+
+        .add-btn {
+            background: #1a5b3e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all .2s;
+            text-decoration: none
+        }
+
+            .add-btn:hover {
+                background: #0f4c2f;
+                transform: translateY(-1px)
+            }
+
+        .alert-card {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 12px
+        }
+
+            .alert-card .alert-title {
+                font-weight: 600;
+                color: #856404;
+                margin-bottom: 4px
+            }
+
+            .alert-card .alert-text {
+                font-size: 14px;
+                color: #856404
+            }
+
+        .profile-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: #000
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #1a5b3e;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 500;
+            margin: 0 auto 1rem
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-bottom: 1.5rem
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px
+        }
+
+        .profile-email {
+            color: #666;
+            font-size: 14px
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 12px;
+            margin-top: 1.5rem
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a5b3e
+        }
     </style>
 </head>
-
 <body>
 
-    <a href="/Account/Login" class="btn-inicio">⬅️ Inicio</a>
-
-    <h1>⚡ Panel de Usuario</h1>
-
-    <div class="container">
-
-        <!-- DASHBOARD -->
-        <button class="accordion">📊 Dashboard</button>
-        <div class="panel">
-            <p>Consumo actual: <b>120 kWh</b></p>
-            <p>Gasto del mes: <b>$850</b></p>
-        </div>
-
-        <!-- REPORTES -->
-        <button class="accordion">📈 Reportes</button>
-        <div class="panel">
-            <p>Consumo por día / semana / mes</p>
-        </div>
-
-        <!-- CONTROL -->
-        <button class="accordion">💡 Control</button>
-        <div class="panel">
-            <button>Encender</button>
-            <button>Apagar</button>
-        </div>
-
-        <!-- HORARIOS -->
-        <button class="accordion">⏰ Horarios</button>
-        <div class="panel">
-            <input type="time" />
-            <button>Guardar</button>
-        </div>
-
-        <!-- ALERTAS -->
-        <button class="accordion">🚨 Alertas</button>
-        <div class="panel">
-            <p>Alto consumo detectado</p>
-        </div>
-
-        <!-- PERFIL -->
-        <button class="accordion">👤 Perfil</button>
-        <div class="panel">
-            <input type="text" placeholder="Nombre" />
-            <input type="email" placeholder="Correo" />
-            <input type="password" placeholder="Contraseña" />
-            <button>Guardar cambios</button>
-        </div>
-
+    <div class="header">
+        <span style="font-size:28px">⚡</span>
+        <h1>Panel de Usuario</h1>
     </div>
 
-    <script>
-        var acc = document.getElementsByClassName("accordion");
+    <div class="nav">
+        <button class="nav-btn active" onclick="showSection('dashboard')">📊 Dashboard</button>
+        <button class="nav-btn" onclick="showSection('control')">💡 Control</button>
+        <button class="nav-btn" onclick="showSection('reportes')">📈 Reportes</button>
+        <button class="nav-btn" onclick="showSection('horarios')">🕐 Horarios</button>
+        <button class="nav-btn" onclick="showSection('alertas')">🔔 Alertas</button>
+        <button class="nav-btn" onclick="showSection('perfil')">👤 Perfil</button>
+    </div>
 
-        for (var i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function () {
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="section active">
+        <div class="cards-grid">
+            <div class="metric-card">
+                <div class="icon">💡</div>
+                <div class="label">Consumo actual</div>
+                <div class="value">120 kWh</div>
+            </div>
+            <div class="metric-card">
+                <div class="icon">💰</div>
+                <div class="label">Gasto del mes</div>
+                <div class="value">$850</div>
+            </div>
+            <div class="metric-card">
+                <div class="icon">⚡</div>
+                <div class="label">Dispositivos activos</div>
+                <div class="value">@ViewBag.DispositivosActivos/@ViewBag.TotalDispositivos</div>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="chartCanvas"></canvas>
+        </div>
+    </div>
 
-                var panel = this.nextElementSibling;
+    <!-- CONTROL -->
+    <div id="control" class="section">
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                <h3 style="font-size:18px;font-weight:500">Mis dispositivos</h3>
+                <a class="add-btn" href="/Dispositivos/Create">
+                    <span style="font-size:18px">+</span> Agregar dispositivo
+                </a>
+            </div>
 
-                if (panel.style.display === "block") {
-                    panel.style.display = "none";
-                } else {
-                    panel.style.display = "block";
+            @if (ViewBag.Dispositivos != null && ((List<EnergySaver.Models.Dispositivo>)ViewBag.Dispositivos).Count > 0)
+            {
+                foreach (var d in (List<EnergySaver.Models.Dispositivo>)ViewBag.Dispositivos)
+                {
+                    <div class="device-item">
+                        <div class="device-info">
+                            <div class="device-name">🔌 @d.nombre</div>
+                            <div class="device-consumption">Consumo: @d.consumoWatts W — @d.ubicacion</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" @(d.estado == "Activo" ? "checked" : "")>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 }
-            });
+            }
+            else
+            {
+                <p style="color:#999;text-align:center;padding:1rem">No tienes dispositivos. ¡Agrega uno!</p>
+            }
+        </div>
+    </div>
+
+    <!-- REPORTES -->
+    <div id="reportes" class="section">
+        <div class="card">
+            <h3 style="font-size:18px;font-weight:500;margin-bottom:1rem">Consumo por día / semana / mes</h3>
+            <div style="margin-bottom:1rem">
+                <select id="periodoSelect" onchange="cambiarPeriodo()" style="padding:8px 12px;border-radius:6px;border:1px solid #ddd;font-size:14px">
+                    <option value="dia">Hoy</option>
+                    <option value="semana">Esta semana</option>
+                    <option value="mes" selected>Este mes</option>
+                </select>
+            </div>
+            <div class="chart-container" style="height:240px">
+                <canvas id="reportChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- HORARIOS -->
+    <div id="horarios" class="section">
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                <h3 style="font-size:18px;font-weight:500">Horarios programados</h3>
+                <button class="add-btn">
+                    <span style="font-size:18px">+</span> Agregar
+                </button>
+            </div>
+            <div style="background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:8px">
+                <div style="font-weight:500;margin-bottom:4px">Lun-Vie: 6:00 AM</div>
+                <div style="font-size:14px;color:#666">Encender cafetera</div>
+            </div>
+            <div style="background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:8px">
+                <div style="font-weight:500;margin-bottom:4px">Diario: 10:00 PM</div>
+                <div style="font-size:14px;color:#666">Apagar luces</div>
+            </div>
+            <div style="background:#f8f9fa;padding:12px;border-radius:8px">
+                <div style="font-weight:500;margin-bottom:4px">Sábados: 8:00 AM</div>
+                <div style="font-size:14px;color:#666">Encender aire acondicionado</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALERTAS -->
+    <div id="alertas" class="section">
+        <div class="alert-card">
+            <div class="alert-title">⚠️ Alto consumo detectado</div>
+            <div class="alert-text">Consumo actual: 180 kWh (límite: 150 kWh)</div>
+        </div>
+        <div class="card">
+            <h3 style="font-size:18px;font-weight:500;margin-bottom:1rem">Historial de alertas</h3>
+            <div style="font-size:14px;color:#666;padding:8px 0;border-bottom:1px solid #eee">19 Abr 2026 - Consumo excesivo detectado</div>
+            <div style="font-size:14px;color:#666;padding:8px 0;border-bottom:1px solid #eee">15 Abr 2026 - Dispositivo desconectado: Refrigerador</div>
+            <div style="font-size:14px;color:#666;padding:8px 0">12 Abr 2026 - Límite de consumo actualizado</div>
+        </div>
+    </div>
+
+    <!-- PERFIL -->
+    <div id="perfil" class="section">
+        <div class="profile-section">
+            <div class="avatar">@(ViewBag.NombreUsuario != null ? ViewBag.NombreUsuario.ToString().Substring(0, 2).ToUpper() : "U1")</div>
+            <div class="profile-info">
+                <div class="profile-name">@ViewBag.NombreUsuario</div>
+                <div class="profile-email">@ViewBag.EmailUsuario</div>
+            </div>
+            <button style="width:100%;padding:10px;background:#1a5b3e;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px">Cambiar contraseña</button>
+            <a href="/Account/Logout" style="width:100%;padding:10px;background:#f8f9fa;color:#000;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;display:block;text-align:center;text-decoration:none;line-height:2.5">Cerrar sesión</a>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">Usuario desde</div>
+                    <div class="stat-value">Abr 2026</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Ahorro del mes</div>
+                    <div class="stat-value">$120</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Dispositivos</div>
+                    <div class="stat-value">@ViewBag.TotalDispositivos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Activos</div>
+                    <div class="stat-value">@ViewBag.DispositivosActivos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        function showSection(id){
+          document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+          document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+          document.getElementById(id).classList.add('active');
+          event.target.classList.add('active');
+        }
+
+        function toggleDevice(checkbox, name){
+          const status = checkbox.checked ? 'encendido' : 'apagado';
+          console.log(name + ' ' + status);
+        }
+
+        const ctx1 = document.getElementById('chartCanvas').getContext('2d');
+        new Chart(ctx1, {
+          type: 'line',
+          data: {
+            labels: ['Lun','Mar','Mie','Jue','Vie','Sab','Dom'],
+            datasets: [{
+              label: 'Consumo (kWh)',
+              data: [95,110,88,105,120,140,115],
+              borderColor: '#1a5b3e',
+              backgroundColor: 'rgba(26,91,62,0.1)',
+              tension: 0.4, fill: true
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } }, x: { grid: { display: false } } }
+          }
+        });
+
+        const ctx2 = document.getElementById('reportChart').getContext('2d');
+        const reportChart = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: ['Sem 1','Sem 2','Sem 3','Sem 4'],
+            datasets: [{ label:'Consumo mensual (kWh)', data:[420,380,450,410], backgroundColor:'#1a5b3e' }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } }, x: { grid: { display: false } } }
+          }
+        });
+
+        function cambiarPeriodo(){
+          const p = document.getElementById('periodoSelect').value;
+          const datos = {
+            dia:    { labels:['6am','9am','12pm','3pm','6pm','9pm'], data:[10,15,20,18,25,12] },
+            semana: { labels:['Lun','Mar','Mie','Jue','Vie','Sab','Dom'], data:[95,110,88,105,120,140,115] },
+            mes:    { labels:['Sem 1','Sem 2','Sem 3','Sem 4'], data:[420,380,450,410] }
+          };
+          reportChart.data.labels = datos[p].labels;
+          reportChart.data.datasets[0].data = datos[p].data;
+          reportChart.update();
         }
     </script>
-
 </body>
 </html>

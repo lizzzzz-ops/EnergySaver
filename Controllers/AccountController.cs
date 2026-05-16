@@ -33,6 +33,11 @@ namespace EnergySaver.Controllers
 
             if (user != null)
             {
+
+                HttpContext.Session.SetInt32("UsuarioId", user.IdUsuario);
+                HttpContext.Session.SetString("UsuarioNombre", user.Nombre);
+                HttpContext.Session.SetString("UsuarioRol", user.Rol);
+
                 if (user.Rol == "Admin")
                     return RedirectToAction("Dashboard", "Admin");
                 else
@@ -80,5 +85,17 @@ namespace EnergySaver.Controllers
 
             return RedirectToAction("Register");
         }
+        // =========================
+        // LOGOUT               ← AGREGA ESTE MÉTODO
+        // =========================
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+        }
+
+
     }
+
+
 }

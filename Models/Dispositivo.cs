@@ -31,5 +31,8 @@ namespace EnergySaver.Models
 
         [Column("fechaRegistro")]
         public DateTime fechaRegistro { get; set; } = DateTime.Now;
+
+        [Column("id_usuario")]
+        public int? id_usuario { get; set; }
     }
 }

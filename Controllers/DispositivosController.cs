@@ -22,16 +22,31 @@ namespace EnergySaver.Controllers
 
         public IActionResult Create()
         {
+            int usuarioId = HttpContext.Session.GetInt32("UsuarioId") ?? 0;
+            if (usuarioId == 0)
+                return RedirectToAction("Login", "Account");
+
             return View();
         }
 
         [HttpPost]
         public IActionResult Create(Dispositivo d)
         {
+            int usuarioId = HttpContext.Session.GetInt32("UsuarioId") ?? 0;
+            string rol = HttpContext.Session.GetString("UsuarioRol") ?? "";
+
+            // Asignar el usuario al dispositivo
+            d.id_usuario = usuarioId;
+
             _context.Dispositivos.Add(d);
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            // Redirigir según el rol
+            if (rol == "Admin")
+                return RedirectToAction("Index");
+            else
+                return RedirectToAction("Usuario", "Home");
+
         }
 
         // GET: Muestra el formulario con los datos actuales
