@@ -84,7 +84,9 @@ CREATE TABLE Reporte (
     
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 );
-
+-- =========================
+-- TABLA: CONFIGURACION
+-- =========================
 CREATE TABLE Configuracion (
     Id INT PRIMARY KEY IDENTITY(1,1),
     TarifaCFE DECIMAL(10,2),
@@ -92,6 +94,10 @@ CREATE TABLE Configuracion (
     HoraInicio VARCHAR(10),
     HoraFin VARCHAR(10)
 );
+
+-- =========================
+-- TABLA: CONFIGURACION
+-- =========================
 ALTER TABLE Configuracion
 ADD LimiteConsumo FLOAT;
 

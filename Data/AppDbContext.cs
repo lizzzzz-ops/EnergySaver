@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using EnergySaver.Models;
 
 namespace EnergySaver.Data
@@ -15,5 +15,7 @@ namespace EnergySaver.Data
         public DbSet<Dispositivo> Dispositivos { get; set; }
 
         public DbSet<Configuracion> Configuracion { get; set; }
+
+        public DbSet<Consumo> Consumos { get; set; }  // ← AGREGA
     }
 }

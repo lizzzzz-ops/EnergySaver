@@ -1,6 +1,6 @@
 ﻿@model EnergySaver.Models.Dispositivo
 @{
-    Layout = null; // Esto es lo que quita el fondo blanco/gris de Visual Studio
+    Layout = null; // Quita el fondo blanco/gris de la plantilla por defecto
 }
 
 <!DOCTYPE html>
@@ -8,10 +8,10 @@
 <head>
     <title>Agregar Dispositivo - EnergySaver</title>
     <style>
-        /* EL DISEÑO VERDE */
+        /* 1. EL FONDO: Verde pino oscuro y sólido del Panel de Usuario */
         body {
             margin: 0;
-            background: linear-gradient(135deg, #1a4a31 0%, #28b463 100%);
+            background-color: #1a4d38;
             height: 100vh;
             display: flex;
             align-items: center;
@@ -19,65 +19,94 @@
             font-family: 'Segoe UI', sans-serif;
         }
 
-        /* LA TARJETA BLANCA */
+        /* 2. LA TARJETA: Mismo tono verde muy oscuro que la barra superior del panel */
         .form-card {
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+            background-color: #0f3625;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0px 12px 35px rgba(0,0,0,0.5);
             width: 400px;
             text-align: center;
         }
 
+            /* 3. TÍTULO: Verde claro suave idéntico a los textos destacados del panel */
             .form-card h2 {
-                color: #2ecc71;
+                color: #5cd699;
+                margin-top: 0;
                 margin-bottom: 25px;
+                font-size: 24px;
+                font-weight: 600;
             }
 
-        /* LOS CUADROS DE TEXTO */
+        /* 4. LOS CAMPOS DE TEXTO: Integrados al fondo oscuro sin contrastes bruscos */
         .form-control {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
             box-sizing: border-box; /* Evita que se salgan de la tarjeta */
+            color: #ffffff;
+            font-size: 15px;
+            transition: all 0.2s ease;
         }
 
-        /* EL BOTÓN */
+            .form-control:focus {
+                outline: none;
+                border-color: #2bb673;
+                background: rgba(255, 255, 255, 0.1);
+                box-shadow: 0 0 8px rgba(43, 182, 115, 0.25);
+            }
+
+            /* Color del texto de ayuda (placeholder) */
+            .form-control::placeholder {
+                color: rgba(255, 255, 255, 0.4);
+            }
+
+        /* 5. EL BOTÓN PRINCIPAL: Con el verde de tu botón original "+ Agregar" */
         .btn-submit {
-            background-color: #2ecc71;
+            background-color: #135237;
             color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 14px;
+            border-radius: 6px;
             width: 100%;
             font-weight: bold;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
+            transition: background-color 0.2s ease;
         }
 
             .btn-submit:hover {
-                background-color: #27ae60;
+                background-color: #1a6948;
             }
 
-        /* BOTÓN DE REGRESAR */
+        /* 6. BOTÓN DE REGRESAR: Estilo de las pestañas superiores del panel */
         .btn-back {
             position: absolute;
             top: 20px;
             left: 20px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            color: #a3c2b2;
+            padding: 9px 16px;
+            border-radius: 6px;
             text-decoration: none;
-            border: 1px solid white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            transition: all 0.2s ease;
         }
+
+            .btn-back:hover {
+                background: rgba(255, 255, 255, 0.15);
+                color: #ffffff;
+            }
     </style>
 </head>
 <body>
 
-    <a href="/Admin/Dashboard" class="btn-back">⬅ Panel</a>
+    <a href="/Home/Usuario" class="btn-back">⬅ Volver al Panel</a>
 
     <div class="form-card">
         <h2>+ Agregar Dispositivo</h2>

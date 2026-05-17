@@ -4,12 +4,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>EnergySaver - Usuario</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI',sans-serif
+            font-family: 'Segoe UI', sans-serif
         }
 
         body {
@@ -19,7 +20,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg,#1e7d50,#0f4c2f);
+            background: linear-gradient(135deg, #1e7d50, #0f4c2f);
             padding: 1rem 1.5rem;
             border-radius: 12px;
             margin-bottom: 1.5rem;
@@ -108,6 +109,28 @@
                 font-size: 32px;
                 margin-bottom: 8px
             }
+
+            .metric-card .sub {
+                font-size: 11px;
+                color: #999;
+                margin-top: 4px
+            }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 8px;
+            overflow: hidden
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #1a5b3e, #2ecc71);
+            height: 100%;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease
+        }
 
         .device-item {
             display: flex;
@@ -299,12 +322,12 @@
     </div>
 
     <div class="nav">
-        <button class="nav-btn active" onclick="showSection('dashboard')">📊 Dashboard</button>
-        <button class="nav-btn" onclick="showSection('control')">💡 Control</button>
-        <button class="nav-btn" onclick="showSection('reportes')">📈 Reportes</button>
-        <button class="nav-btn" onclick="showSection('horarios')">🕐 Horarios</button>
-        <button class="nav-btn" onclick="showSection('alertas')">🔔 Alertas</button>
-        <button class="nav-btn" onclick="showSection('perfil')">👤 Perfil</button>
+        <button class="nav-btn active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+        <button class="nav-btn" onclick="showSection('control',this)">💡 Control</button>
+        <button class="nav-btn" onclick="showSection('reportes',this)">📈 Reportes</button>
+        <button class="nav-btn" onclick="showSection('horarios',this)">🕐 Horarios</button>
+        <button class="nav-btn" onclick="showSection('alertas',this)">🔔 Alertas</button>
+        <button class="nav-btn" onclick="showSection('perfil',this)">👤 Perfil</button>
     </div>
 
     <!-- DASHBOARD -->
@@ -312,71 +335,213 @@
         <div class="cards-grid">
             <div class="metric-card">
                 <div class="icon">💡</div>
-                <div class="label">Consumo actual</div>
-                <div class="value">120 kWh</div>
+                <div class="label">Consumo del mes</div>
+                <div class="value">@(ViewBag.ConsumoMes ?? 0) kWh</div>
+                <div class="sub">Anterior: @(ViewBag.ConsumoMesAnterior ?? 0) kWh</div>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             </div>
             <div class="metric-card">
                 <div class="icon">💰</div>
-                <div class="label">Gasto del mes</div>
-                <div class="value">$850</div>
+                <div class="label">Gasto estimado</div>
+                <div class="value">$@(Math.Round((double)(ViewBag.ConsumoMes ?? 0) * 2.5, 0))</div>
+                <div class="sub">Tarifa: $2.50/kWh</div>
             </div>
             <div class="metric-card">
                 <div class="icon">⚡</div>
                 <div class="label">Dispositivos activos</div>
                 <div class="value">@ViewBag.DispositivosActivos/@ViewBag.TotalDispositivos</div>
+                <div class="sub">@ViewBag.TotalDispositivos registrados</div>
             </div>
         </div>
-        <div class="chart-container">
-            <canvas id="chartCanvas"></canvas>
+        <div class="chart-container" style="margin-bottom:1rem">
+            <div style="font-size:15px;font-weight:600;color:#333;margin-bottom:1rem">📊 Consumo últimos 7 días</div>
+            <div style="height:200px;position:relative"><canvas id="chartCanvas"></canvas></div>
+        </div>
+        <div class="card">
+            <div style="font-size:15px;font-weight:600;color:#333;margin-bottom:1rem">📈 Comparativa mes actual vs anterior</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div style="background:#f8f9fa;padding:14px;border-radius:10px;text-align:center">
+                    <div style="font-size:12px;color:#666;margin-bottom:6px">Este mes</div>
+                    <div style="font-size:22px;font-weight:600;color:#1a5b3e">@(ViewBag.ConsumoMes ?? 0) kWh</div>
+                </div>
+                <div style="background:#f8f9fa;padding:14px;border-radius:10px;text-align:center">
+                    <div style="font-size:12px;color:#666;margin-bottom:6px">Mes anterior</div>
+                    @{
+                        double actual = (double)(ViewBag.ConsumoMes ?? 0);
+                        double anterior = (double)(ViewBag.ConsumoMesAnterior ?? 0);
+                        string colorComp = actual <= anterior ? "#27ae60" : "#e74c3c";
+                        string mensaje = actual == 0 ? "Sin datos este mes" :
+                        anterior == 0 ? "Sin datos mes anterior" :
+                        actual < anterior ? $"✅ Ahorraste {Math.Round(anterior - actual, 1)} kWh" :
+                        $"⚠️ +{Math.Round(actual - anterior, 1)} kWh más que el mes pasado";
+                    }
+                    <div style="font-size:22px;font-weight:600;color:@colorComp">@(ViewBag.ConsumoMesAnterior ?? 0) kWh</div>
+                </div>
+            </div>
+            <p style="text-align:center;margin-top:1rem;font-size:13px;color:#555">@mensaje</p>
         </div>
     </div>
 
     <!-- CONTROL -->
     <div id="control" class="section">
         <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
                 <h3 style="font-size:18px;font-weight:500">Mis dispositivos</h3>
-                <a class="add-btn" href="/Dispositivos/Create">
-                    <span style="font-size:18px">+</span> Agregar dispositivo
-                </a>
+                <div style="display:flex;gap:8px">
+                    <button onclick="apagarTodo()"
+                            style="display:flex;align-items:center;gap:6px;background:#e74c3c;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s"
+                            onmouseover="this.style.background='#c0392b';this.style.transform='translateY(-1px)'"
+                            onmouseout="this.style.background='#e74c3c';this.style.transform='translateY(0)'">
+                        ⚡ Apagar todo
+                    </button>
+                    <button onclick="activarModoEliminar()" id="btnEliminar"
+                            style="display:flex;align-items:center;gap:6px;background:#e67e22;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s"
+                            onmouseover="this.style.background='#ca6f1e';this.style.transform='translateY(-1px)'"
+                            onmouseout="this.style.background='#e67e22';this.style.transform='translateY(0)'">
+                        🗑️ Eliminar
+                    </button>
+                    <a href="/Dispositivos/Create"
+                       style="display:flex;align-items:center;gap:6px;background:#1a5b3e;color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;text-decoration:none"
+                       onmouseover="this.style.background='#0f4c2f';this.style.transform='translateY(-1px)'"
+                       onmouseout="this.style.background='#1a5b3e';this.style.transform='translateY(0)'">
+                        ＋ Agregar
+                    </a>
+                </div>
             </div>
 
-            @if (ViewBag.Dispositivos != null && ((List<EnergySaver.Models.Dispositivo>)ViewBag.Dispositivos).Count > 0)
-            {
-                foreach (var d in (List<EnergySaver.Models.Dispositivo>)ViewBag.Dispositivos)
+            <div id="bannerEliminar"
+                 style="display:none;background:#fff3cd;border-left:4px solid #e67e22;padding:10px 14px;border-radius:8px;margin-bottom:1rem;font-size:13px;color:#856404;align-items:center;gap:8px">
+                ⚠️ Haz clic en <strong>🗑️ Eliminar</strong> del dispositivo que deseas borrar.
+                <button onclick="desactivarModoEliminar()"
+                        style="margin-left:auto;background:#856404;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer">
+                    Cancelar
+                </button>
+            </div>
+
+            <input type="text" id="buscadorDispositivo" oninput="filtrarDispositivos(this.value)"
+                   placeholder="🔍 Buscar dispositivo..."
+                   style="width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:1rem">
+
+            <div id="listaDispositivos">
+                @if (ViewBag.Dispositivos != null && ((List<EnergySaver.Models.Dispositivo>)ViewBag.Dispositivos).Count > 0)
                 {
-                    <div class="device-item">
-                        <div class="device-info">
-                            <div class="device-name">🔌 @d.nombre</div>
-                            <div class="device-consumption">Consumo: @d.consumoWatts W — @d.ubicacion</div>
+                    foreach (var d in (List<EnergySaver.Models.Dispositivo>)ViewBag.Dispositivos)
+                    {
+                        <div class="device-item"
+                             data-nombre="@d.nombre.ToLower()"
+                             data-id="@d.id_dispositivo"
+                             data-estado="@d.estado"
+                             data-watts="@(d.consumoWatts ?? 0)">
+                            <div class="device-info">
+                                <div class="device-name">🔌 @d.nombre</div>
+                                <div class="device-consumption">@d.tipo — @d.consumoWatts W — @d.ubicacion</div>
+                                <div style="margin-top:4px">
+                                    <span class="badge-estado"
+                                          style="font-size:12px;padding:3px 8px;border-radius:20px;background:@(d.estado == "Activo" ? "#d4edda" : "#f8d7da");color:@(d.estado == "Activo" ? "#155724" : "#721c24")">
+                                        @d.estado
+                                    </span>
+                                    <span style="font-size:12px;color:#999;margin-left:8px">
+                                        💰 Costo/h: $@(Math.Round((d.consumoWatts ?? 0) / 1000 * 2.5, 4))
+                                    </span>
+                                </div>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:10px">
+                                <button class="btn-del-dispositivo"
+                                        onclick="eliminarDispositivo(this)"
+                                        style="display:none;background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer"
+                                        onmouseover="this.style.background='#c0392b'"
+                                        onmouseout="this.style.background='#e74c3c'">
+                                    🗑️ Eliminar
+                                </button>
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                                    <label class="switch">
+                                        <input type="checkbox" @(d.estado == "Activo" ? "checked" : "")
+                                               onchange="toggleDevice(this)">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <span class="lbl-estado" style="font-size:11px;color:#999">
+                                        @(d.estado == "Activo" ? "Encendido" : "Apagado")
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <label class="switch">
-                            <input type="checkbox" @(d.estado == "Activo" ? "checked" : "")>
-                            <span class="slider"></span>
-                        </label>
+                    }
+                }
+                else
+                {
+                    <div style="text-align:center;padding:2rem;color:#999">
+                        <div style="font-size:48px;margin-bottom:1rem">🔌</div>
+                        <p>No tienes dispositivos. ¡Agrega uno!</p>
                     </div>
                 }
-            }
-            else
-            {
-                <p style="color:#999;text-align:center;padding:1rem">No tienes dispositivos. ¡Agrega uno!</p>
-            }
+            </div>
+
+            <div style="margin-top:1rem;padding:12px;background:#f8f9fa;border-radius:8px;display:flex;justify-content:space-between">
+                <div style="text-align:center">
+                    <div style="font-size:12px;color:#666">Total</div>
+                    <div id="res-total" style="font-size:18px;font-weight:600;color:#1a5b3e">@ViewBag.TotalDispositivos</div>
+                </div>
+                <div style="text-align:center">
+                    <div style="font-size:12px;color:#666">Activos</div>
+                    <div id="res-activos" style="font-size:18px;font-weight:600;color:#27ae60">@ViewBag.DispositivosActivos</div>
+                </div>
+                <div style="text-align:center">
+                    <div style="font-size:12px;color:#666">Apagados</div>
+                    <div id="res-apagados" style="font-size:18px;font-weight:600;color:#e74c3c">
+                        @((int)(ViewBag.TotalDispositivos ?? 0) - (int)(ViewBag.DispositivosActivos ?? 0))
+                    </div>
+                </div>
+                <div style="text-align:center">
+                    <div style="font-size:12px;color:#666">Costo total/h</div>
+                    <div id="res-costo" style="font-size:18px;font-weight:600;color:#1a5b3e">
+                        $@{
+                        double costoTotal = 0;
+                        if (ViewBag.Dispositivos != null)
+                        {
+                            foreach (var d in (List<EnergySaver.Models.Dispositivo>)ViewBag.Dispositivos)
+                            {
+                                if (d.estado == "Activo")
+                                    costoTotal += (d.consumoWatts ?? 0) / 1000 * 2.5;
+                            }
+                        }
+                        @Math.Round(costoTotal, 4)
+                                                }
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- REPORTES -->
     <div id="reportes" class="section">
         <div class="card">
-            <h3 style="font-size:18px;font-weight:500;margin-bottom:1rem">Consumo por día / semana / mes</h3>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:1rem">
+                <h3 style="font-size:18px;font-weight:500">📊 Reporte de consumo</h3>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button onclick="descargarPDF()" style="background:#e74c3c;color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer">📥 Descargar PDF</button>
+                    <button onclick="enviarEmail()" style="background:#3498db;color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer">📧 Enviar Email</button>
+                </div>
+            </div>
             <div style="margin-bottom:1rem">
-                <select id="periodoSelect" onchange="cambiarPeriodo()" style="padding:8px 12px;border-radius:6px;border:1px solid #ddd;font-size:14px">
+                <select id="periodoSelect" onchange="cambiarPeriodo()" style="padding:10px;border-radius:8px;border:1px solid #ddd">
                     <option value="dia">Hoy</option>
-                    <option value="semana">Esta semana</option>
-                    <option value="mes" selected>Este mes</option>
+                    <option value="semana">Semana</option>
+                    <option value="mes" selected>Mes</option>
                 </select>
             </div>
-            <div class="chart-container" style="height:240px">
-                <canvas id="reportChart"></canvas>
+            <div class="chart-container"><canvas id="reportChart"></canvas></div>
+            <div style="margin-top:1rem">
+                <h4 style="margin-bottom:10px">📈 Comparativa</h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                    <div style="background:#f8f9fa;padding:15px;border-radius:10px;text-align:center">
+                        <div style="font-size:13px;color:#666">Mes actual</div>
+                        <div style="font-size:25px;font-weight:bold;color:#1a5b3e">@(ViewBag.ConsumoMes ?? 0) kWh</div>
+                    </div>
+                    <div style="background:#f8f9fa;padding:15px;border-radius:10px;text-align:center">
+                        <div style="font-size:13px;color:#666">Mes anterior</div>
+                        <div style="font-size:25px;font-weight:bold;color:#e67e22">@(ViewBag.ConsumoMesAnterior ?? 0) kWh</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -385,130 +550,381 @@
     <div id="horarios" class="section">
         <div class="card">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-                <h3 style="font-size:18px;font-weight:500">Horarios programados</h3>
-                <button class="add-btn">
-                    <span style="font-size:18px">+</span> Agregar
-                </button>
+                <h3>🕐 Horarios programados</h3>
+                <button class="add-btn" onclick="abrirModalHorario()"><span style="font-size:18px">+</span> Agregar</button>
             </div>
-            <div style="background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:8px">
-                <div style="font-weight:500;margin-bottom:4px">Lun-Vie: 6:00 AM</div>
-                <div style="font-size:14px;color:#666">Encender cafetera</div>
+            <div id="listaHorarios">
+                <div class="device-item">
+                    <div class="device-info">
+                        <div class="device-name">☕ Cafetera</div>
+                        <div class="device-consumption">Lun-Vie | 6:00 AM</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <label class="switch"><input checked type="checkbox"><span class="slider"></span></label>
+                       
+                        <button onclick="eliminarHorario(this)" style="border:none;background:#e74c3c;color:white;padding:8px;border-radius:6px">🗑️</button>
+                    </div>
+                </div>
             </div>
-            <div style="background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:8px">
-                <div style="font-weight:500;margin-bottom:4px">Diario: 10:00 PM</div>
-                <div style="font-size:14px;color:#666">Apagar luces</div>
-            </div>
-            <div style="background:#f8f9fa;padding:12px;border-radius:8px">
-                <div style="font-weight:500;margin-bottom:4px">Sábados: 8:00 AM</div>
-                <div style="font-size:14px;color:#666">Encender aire acondicionado</div>
+        </div>
+    </div>
+
+    <!-- MODAL HORARIO -->
+    <div id="modalHorario" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);justify-content:center;align-items:center;z-index:999;">
+        <div style="background:white;width:400px;padding:25px;border-radius:12px;color:black;">
+            <h3 style="margin-bottom:1rem">Nuevo horario</h3>
+            <input id="dispositivoHorario" placeholder="Dispositivo" style="width:100%;padding:10px;margin-bottom:10px">
+            <input id="horaHorario" type="time" style="width:100%;padding:10px;margin-bottom:10px">
+            <input id="diasHorario" placeholder="Ej: Lun-Vie" style="width:100%;padding:10px;margin-bottom:15px">
+            <div style="display:flex;justify-content:end;gap:10px">
+                <button onclick="cerrarModalHorario()" style="padding:10px">Cancelar</button>
+                <button onclick="guardarHorario()" style="background:#1a5b3e;color:white;border:none;padding:10px;border-radius:8px">Guardar</button>
             </div>
         </div>
     </div>
 
     <!-- ALERTAS -->
     <div id="alertas" class="section">
-        <div class="alert-card">
-            <div class="alert-title">⚠️ Alto consumo detectado</div>
-            <div class="alert-text">Consumo actual: 180 kWh (límite: 150 kWh)</div>
-        </div>
         <div class="card">
-            <h3 style="font-size:18px;font-weight:500;margin-bottom:1rem">Historial de alertas</h3>
-            <div style="font-size:14px;color:#666;padding:8px 0;border-bottom:1px solid #eee">19 Abr 2026 - Consumo excesivo detectado</div>
-            <div style="font-size:14px;color:#666;padding:8px 0;border-bottom:1px solid #eee">15 Abr 2026 - Dispositivo desconectado: Refrigerador</div>
-            <div style="font-size:14px;color:#666;padding:8px 0">12 Abr 2026 - Límite de consumo actualizado</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                <h3 style="font-size:18px;font-weight:500">🔔 Alertas</h3>
+                <div style="background:#e74c3c;color:white;padding:6px 12px;border-radius:20px;font-size:13px">
+                    Sin leer: <span id="contadorAlertas">2</span>
+                </div>
+            </div>
+            <div id="listaAlertas">
+                <div class="alert-card alerta-item">
+                    <div class="alert-title">⚠️ Alto consumo detectado</div>
+                    <div class="alert-text">Consumo actual: 180 kWh</div>
+                    <div style="margin-top:10px">
+                        <button onclick="marcarLeida(this)" style="background:#1a5b3e;color:white;border:none;padding:8px;border-radius:6px">✓ Leída</button>
+                        <button onclick="eliminarAlerta(this)" style="background:#e74c3c;color:white;border:none;padding:8px;border-radius:6px">🗑️ Eliminar</button>
+                    </div>
+                </div>
+                <div class="alert-card alerta-item">
+                    <div class="alert-title">🔌 Dispositivo desconectado</div>
+                    <div class="alert-text">Refrigerador desconectado</div>
+                    <div style="margin-top:10px">
+                        <button onclick="marcarLeida(this)" style="background:#1a5b3e;color:white;border:none;padding:8px;border-radius:6px">✓ Leída</button>
+                        <button onclick="eliminarAlerta(this)" style="background:#e74c3c;color:white;border:none;padding:8px;border-radius:6px">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" style="display:none;position:fixed;bottom:20px;right:20px;background:#1a5b3e;color:white;padding:15px;border-radius:10px;z-index:9999">
+        Nueva alerta detectada ⚠️
+    </div>
+
+    <!-- MODAL CONFIRMACIÓN -->
+    <div id="modalConfirm" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);justify-content:center;align-items:center;z-index:1000">
+        <div style="background:#1e2d24;width:360px;padding:28px;border-radius:16px;color:#fff;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+            <div id="modalConfirmIcon" style="font-size:48px;margin-bottom:16px">⚠️</div>
+            <div id="modalConfirmTitle" style="font-size:18px;font-weight:600;margin-bottom:8px"></div>
+            <div id="modalConfirmMsg" style="font-size:14px;color:#aaa;margin-bottom:24px"></div>
+            <div style="display:flex;gap:10px;justify-content:center">
+                <button onclick="modalConfirmCancelar()"
+                        style="padding:10px 24px;border-radius:8px;border:1px solid #444;background:transparent;color:#ccc;font-size:14px;cursor:pointer"
+                        onmouseover="this.style.background='#2e3d34'"
+                        onmouseout="this.style.background='transparent'">
+                    Cancelar
+                </button>
+                <button id="modalConfirmOk"
+                        style="padding:10px 24px;border-radius:8px;border:none;background:#e74c3c;color:#fff;font-size:14px;font-weight:500;cursor:pointer">
+                    Aceptar
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- PERFIL -->
     <div id="perfil" class="section">
         <div class="profile-section">
-            <div class="avatar">@(ViewBag.NombreUsuario != null ? ViewBag.NombreUsuario.ToString().Substring(0, 2).ToUpper() : "U1")</div>
+            <div style="text-align:center">
+                <div class="avatar" id="avatarUsuario">
+                    @(ViewBag.NombreUsuario != null ? ViewBag.NombreUsuario.ToString().Substring(0, 2).ToUpper() : "U1")
+                </div>
+                <input type="file" id="fotoPerfil" accept="image/*" onchange="cambiarAvatar(event)" style="margin-top:10px">
+            </div>
             <div class="profile-info">
                 <div class="profile-name">@ViewBag.NombreUsuario</div>
                 <div class="profile-email">@ViewBag.EmailUsuario</div>
             </div>
-            <button style="width:100%;padding:10px;background:#1a5b3e;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px">Cambiar contraseña</button>
-            <a href="/Account/Logout" style="width:100%;padding:10px;background:#f8f9fa;color:#000;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;display:block;text-align:center;text-decoration:none;line-height:2.5">Cerrar sesión</a>
+            <div style="margin-top:20px">
+                <h3 style="margin-bottom:10px">🏆 Insignias</h3>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <div class="stat-item">🌱 Ahorrador</div>
+                    <div class="stat-item">⚡ Energía eficiente</div>
+                    <div class="stat-item">🔥 Usuario activo</div>
+                </div>
+            </div>
+            <div style="margin-top:20px">
+                <h3 style="margin-bottom:10px">🎯 Meta de ahorro</h3>
+                <input type="number" id="metaAhorro" placeholder="Ej: 150" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px">
+                <button onclick="guardarMeta()" style="margin-top:10px;width:100%;background:#1a5b3e;color:white;border:none;padding:10px;border-radius:8px">Guardar meta</button>
+            </div>
             <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-label">Usuario desde</div>
-                    <div class="stat-value">Abr 2026</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Ahorro del mes</div>
-                    <div class="stat-value">$120</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Dispositivos</div>
-                    <div class="stat-value">@ViewBag.TotalDispositivos</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Activos</div>
-                    <div class="stat-value">@ViewBag.DispositivosActivos</div>
-                </div>
+                <div class="stat-item"><div class="stat-label">Consumo mes</div><div class="stat-value">@(ViewBag.ConsumoMes ?? 0) kWh</div></div>
+                <div class="stat-item"><div class="stat-label">Gasto estimado</div><div class="stat-value">$@(Math.Round((double)(ViewBag.ConsumoMes ?? 0) * 2.5, 0))</div></div>
+                <div class="stat-item"><div class="stat-label">Dispositivos</div><div class="stat-value">@ViewBag.TotalDispositivos</div></div>
+                <div class="stat-item"><div class="stat-label">Activos</div><div class="stat-value">@ViewBag.DispositivosActivos</div></div>
             </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
-        function showSection(id){
-          document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-          document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-          document.getElementById(id).classList.add('active');
-          event.target.classList.add('active');
+
+        // ── NAVEGACIÓN ──
+        function showSection(id, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
         }
 
-        function toggleDevice(checkbox, name){
-          const status = checkbox.checked ? 'encendido' : 'apagado';
-          console.log(name + ' ' + status);
-        }
+        // ── BARRA DE PROGRESO ──
+        const consumoMes = @(ViewBag.ConsumoMes ?? 0);
+        setTimeout(() => {
+            const fill = document.getElementById('progressFill');
+            if (fill) fill.style.width = Math.min((consumoMes / 150) * 100, 100) + '%';
+        }, 400);
 
-        const ctx1 = document.getElementById('chartCanvas').getContext('2d');
-        new Chart(ctx1, {
-          type: 'line',
-          data: {
-            labels: ['Lun','Mar','Mie','Jue','Vie','Sab','Dom'],
-            datasets: [{
-              label: 'Consumo (kWh)',
-              data: [95,110,88,105,120,140,115],
-              borderColor: '#1a5b3e',
-              backgroundColor: 'rgba(26,91,62,0.1)',
-              tension: 0.4, fill: true
-            }]
-          },
-          options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } }, x: { grid: { display: false } } }
-          }
+        // ── GRÁFICAS ──
+        const graficaLabels = @Html.Raw((string)ViewBag.GraficaLabels ?? "[\"Lun\",\"Mar\",\"Mi\\u00e9\",\"Jue\",\"Vie\",\"S\\u00e1b\",\"Dom\"]");
+        const graficaValores = @Html.Raw((string)ViewBag.GraficaValores ?? "[0,0,0,0,0,0,0]");
+
+        new Chart(document.getElementById('chartCanvas').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: graficaLabels,
+                datasets: [{ label: 'Consumo (kWh)', data: graficaValores, borderColor: '#1a5b3e', backgroundColor: 'rgba(26,91,62,0.1)', tension: 0.4, fill: true, pointBackgroundColor: '#1a5b3e', pointRadius: 5, pointHoverRadius: 7 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1000 }, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } }, x: { grid: { display: false } } } }
         });
 
-        const ctx2 = document.getElementById('reportChart').getContext('2d');
-        const reportChart = new Chart(ctx2, {
-          type: 'bar',
-          data: {
-            labels: ['Sem 1','Sem 2','Sem 3','Sem 4'],
-            datasets: [{ label:'Consumo mensual (kWh)', data:[420,380,450,410], backgroundColor:'#1a5b3e' }]
-          },
-          options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } }, x: { grid: { display: false } } }
-          }
+        const reportChart = new Chart(document.getElementById('reportChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: ['Sem 1','Sem 2','Sem 3','Sem 4'], datasets: [{ label: 'Consumo (kWh)', data: [420,380,450,410], backgroundColor: '#1a5b3e' }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
         });
 
-        function cambiarPeriodo(){
-          const p = document.getElementById('periodoSelect').value;
-          const datos = {
-            dia:    { labels:['6am','9am','12pm','3pm','6pm','9pm'], data:[10,15,20,18,25,12] },
-            semana: { labels:['Lun','Mar','Mie','Jue','Vie','Sab','Dom'], data:[95,110,88,105,120,140,115] },
-            mes:    { labels:['Sem 1','Sem 2','Sem 3','Sem 4'], data:[420,380,450,410] }
-          };
-          reportChart.data.labels = datos[p].labels;
-          reportChart.data.datasets[0].data = datos[p].data;
-          reportChart.update();
+        function cambiarPeriodo() {
+            const p = document.getElementById('periodoSelect').value;
+            const datos = {
+                dia:    { labels: ['6am','9am','12pm','3pm','6pm','9pm'], data: [10,15,20,18,25,12] },
+                semana: { labels: graficaLabels, data: graficaValores },
+                mes:    { labels: ['Sem 1','Sem 2','Sem 3','Sem 4'], data: [420,380,450,410] }
+            };
+            reportChart.data.labels = datos[p].labels;
+            reportChart.data.datasets[0].data = datos[p].data;
+            reportChart.update();
         }
+
+        // ── MODAL CONFIRMACIÓN ──
+        let _confirmCallback = null;
+
+        function mostrarConfirm(titulo, mensaje, icono, colorBtn, callback) {
+            document.getElementById('modalConfirmTitle').textContent = titulo;
+            document.getElementById('modalConfirmMsg').textContent = mensaje;
+            document.getElementById('modalConfirmIcon').textContent = icono || '⚠️';
+            document.getElementById('modalConfirmOk').style.background = colorBtn || '#e74c3c';
+            document.getElementById('modalConfirm').style.display = 'flex';
+            _confirmCallback = callback;
+        }
+
+        function modalConfirmCancelar() {
+            document.getElementById('modalConfirm').style.display = 'none';
+            _confirmCallback = null;
+        }
+
+        document.getElementById('modalConfirmOk').addEventListener('click', function () {
+            document.getElementById('modalConfirm').style.display = 'none';
+            if (_confirmCallback) _confirmCallback();
+            _confirmCallback = null;
+        });
+
+        // ── RESUMEN ──
+        function actualizarResumen() {
+            const items = document.querySelectorAll('#listaDispositivos .device-item');
+            let total = items.length, activos = 0, costo = 0;
+            items.forEach(item => {
+                if (item.getAttribute('data-estado') === 'Activo') {
+                    activos++;
+                    costo += parseFloat(item.getAttribute('data-watts') || '0') / 1000 * 2.5;
+                }
+            });
+            document.getElementById('res-total').textContent = total;
+            document.getElementById('res-activos').textContent = activos;
+            document.getElementById('res-apagados').textContent = total - activos;
+            document.getElementById('res-costo').textContent = '$' + costo.toFixed(4);
+        }
+
+        // ── TOGGLE ──
+        function toggleDevice(checkbox) {
+            const item = checkbox.closest('.device-item');
+            const id = item.getAttribute('data-id');
+            const nuevoEstado = checkbox.checked ? 'Activo' : 'Inactivo';
+            const badge = item.querySelector('.badge-estado');
+            const lbl = item.querySelector('.lbl-estado');
+            item.setAttribute('data-estado', nuevoEstado);
+            badge.textContent = nuevoEstado;
+            badge.style.background = nuevoEstado === 'Activo' ? '#d4edda' : '#f8d7da';
+            badge.style.color = nuevoEstado === 'Activo' ? '#155724' : '#721c24';
+            lbl.textContent = nuevoEstado === 'Activo' ? 'Encendido' : 'Apagado';
+            actualizarResumen();
+            fetch('/Dispositivos/CambiarEstado', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'id=' + id + '&estado=' + nuevoEstado
+            }).catch(() => { checkbox.checked = !checkbox.checked; actualizarResumen(); });
+        }
+
+        // ── FILTRAR ──
+        function filtrarDispositivos(texto) {
+            document.querySelectorAll('#listaDispositivos .device-item').forEach(item => {
+                const nombre = item.getAttribute('data-nombre') || '';
+                item.style.display = nombre.includes(texto.toLowerCase()) ? 'flex' : 'none';
+            });
+        }
+
+        // ── APAGAR TODO ──
+        function apagarTodo() {
+            mostrarConfirm('¿Apagar todos los dispositivos?', 'Se apagarán todos los dispositivos activos.', '⚡', '#e74c3c', function () {
+                document.querySelectorAll('#listaDispositivos .switch input:checked').forEach(cb => {
+                    cb.checked = false;
+                    toggleDevice(cb);
+                });
+            });
+        }
+
+        // ── MODO ELIMINAR ──
+        let modoEliminar = false;
+
+        function activarModoEliminar() {
+            modoEliminar = true;
+            document.getElementById('bannerEliminar').style.display = 'flex';
+            document.getElementById('btnEliminar').style.background = '#ca6f1e';
+            document.querySelectorAll('.btn-del-dispositivo').forEach(b => b.style.display = 'inline-block');
+        }
+
+        function desactivarModoEliminar() {
+            modoEliminar = false;
+            document.getElementById('bannerEliminar').style.display = 'none';
+            document.getElementById('btnEliminar').style.background = '#e67e22';
+            document.querySelectorAll('.btn-del-dispositivo').forEach(b => b.style.display = 'none');
+        }
+
+        // ── ELIMINAR DISPOSITIVO ──
+        function eliminarDispositivo(btn) {
+            const item = btn.closest('.device-item');
+            const id = item.getAttribute('data-id');
+            const nombre = item.querySelector('.device-name').textContent.trim();
+            mostrarConfirm('¿Eliminar dispositivo?', 'Se eliminará ' + nombre + ' permanentemente.', '🗑️', '#e74c3c', function () {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/Dispositivos/EliminarAjax';
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'id';
+                input.value = id;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            });
+        }
+
+        // ── REPORTES ──
+                
+        function descargarPDF() {
+            mostrarConfirm(
+                '¿Descargar reporte PDF?',
+                'Se generará un PDF con tu consumo y dispositivos.',
+                '📥', '#e74c3c',
+                function () {
+                    window.location.href = '/Home/DescargarPDF';
+                }
+            );
+        }
+
+        function enviarEmail() {
+            mostrarConfirm(
+                '¿Enviar reporte por correo?',
+                'Se enviará el reporte a tu correo registrado.',
+                '📧', '#3498db',
+                function () {
+                    window.location.href = '/Home/EnviarReporte';
+                }
+            );
+        }
+
+        // ── HORARIOS ──
+        function abrirModalHorario() { document.getElementById('modalHorario').style.display = 'flex'; }
+        function cerrarModalHorario() { document.getElementById('modalHorario').style.display = 'none'; }
+
+        function guardarHorario() {
+            const dispositivo = document.getElementById('dispositivoHorario').value;
+            const hora = document.getElementById('horaHorario').value;
+            const dias = document.getElementById('diasHorario').value;
+            if (!dispositivo || !hora) { alert('Completa todos los campos'); return; }
+            document.getElementById('listaHorarios').innerHTML += `
+                <div class="device-item">
+                    <div class="device-info">
+                        <div class="device-name">🔌 ${dispositivo}</div>
+                        <div class="device-consumption">${dias} | ${hora}</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                        
+                        <button onclick="eliminarHorario(this)" style="border:none;background:#e74c3c;color:white;padding:8px;border-radius:6px;cursor:pointer">🗑️</button>
+                    </div>
+                </div>`;
+            cerrarModalHorario();
+        }
+
+        function eliminarHorario(btn) {
+            mostrarConfirm('¿Eliminar horario?', 'Se eliminará este horario.', '🕐', '#e74c3c',
+                function () { btn.closest('.device-item').remove(); });
+        }
+
+        
+
+        // ── ALERTAS ──
+        let alertasSinLeer = 2;
+        function actualizarContador() { document.getElementById('contadorAlertas').innerText = alertasSinLeer; }
+        function marcarLeida(btn) {
+            btn.innerHTML = '✓ Leída'; btn.disabled = true; btn.style.opacity = '.6';
+            if (alertasSinLeer > 0) alertasSinLeer--;
+            actualizarContador();
+        }
+        function eliminarAlerta(btn) { btn.closest('.alerta-item').remove(); }
+        function mostrarToast() {
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+        setInterval(mostrarToast, 20000);
+
+        // ── PERFIL ──
+        function cambiarAvatar(event) {
+            const archivo = event.target.files[0];
+            if (!archivo) return;
+            const lector = new FileReader();
+            lector.onload = function(e) {
+                document.getElementById('avatarUsuario').innerHTML =
+                    `<img src="${e.target.result}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">`;
+            };
+            lector.readAsDataURL(archivo);
+        }
+
+        function guardarMeta() {
+            const meta = document.getElementById('metaAhorro').value;
+            if (!meta) { alert('Ingresa una meta'); return; }
+            alert('Meta guardada: ' + meta + ' kWh');
+        }
+
     </script>
 </body>
 </html>
