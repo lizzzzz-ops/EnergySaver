@@ -412,13 +412,115 @@ namespace EnergySaver.Controllers
 
             return RedirectToAction("ConsultarHorarios");
         }
+        // =========================
+        // LIMITE CONSUMO
+        // =========================
+
         public IActionResult LimiteConsumo()
         {
-            var limites = _context.Configuracion.ToList();
+            var limites = _context.Configuracion
+                .OrderByDescending(x => x.Id)
+                .ToList();
 
             return View(limites);
         }
 
-        
+        // =========================
+        // GUARDAR LIMITE
+        // =========================
+
+        [HttpPost]
+        public IActionResult GuardarLimite(float limite)
+        {
+            try
+            {
+                // CREA NUEVO REGISTRO
+                var nuevo = new Configuracion
+                {
+                    TarifaCFE = 0,
+                    Impuesto = 0,
+                    HoraInicio = "",
+                    HoraFin = "",
+                    LimiteConsumo = limite
+                };
+
+                _context.Configuracion.Add(nuevo);
+
+                _context.SaveChanges();
+
+                TempData["Success"] = "Límite guardado correctamente";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction("LimiteConsumo");
+        }
+
+        // =========================
+        // EDITAR LIMITE
+        // =========================
+
+        public IActionResult EditarLimite(int id, float limite)
+        {
+            try
+            {
+                var config = _context.Configuracion.Find(id);
+
+                if (config != null)
+                {
+                    config.LimiteConsumo = limite;
+
+                    _context.SaveChanges();
+
+                    TempData["Success"] = "Límite actualizado correctamente";
+                }
+                else
+                {
+                    TempData["Error"] = "No se encontró el límite";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction("LimiteConsumo");
+        }
+
+        // =========================
+        // ELIMINAR LIMITE
+        // =========================
+
+        public IActionResult EliminarLimite(int id)
+        {
+            try
+            {
+                var config = _context.Configuracion.Find(id);
+
+                if (config != null)
+                {
+                    _context.Configuracion.Remove(config);
+
+                    _context.SaveChanges();
+
+                    TempData["Success"] = "Límite eliminado correctamente";
+                }
+                else
+                {
+                    TempData["Error"] = "No se encontró el límite";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction("LimiteConsumo");
+        }
+
+
+
     }
 }
