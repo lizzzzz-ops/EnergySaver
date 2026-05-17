@@ -6,6 +6,7 @@
 <html>
 <head>
     <title>EnergySaver - Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
 
@@ -180,13 +181,11 @@
         </button>
 
         <div class="panel">
+            <a asp-controller="Admin"
+               asp-action="LimiteConsumo">
 
-            <a href="#">
                 ⚡ Limitar consumo
-            </a>
 
-            <a href="#">
-                ❄️ Apagar clima automático
             </a>
 
         </div>
@@ -296,6 +295,43 @@
         }
 
     </script>
+    <script>
 
+        function guardarLimite(){
+
+            let limite =
+            document.getElementById("limiteConsumo").value;
+
+            Swal.fire({
+
+                title: 'Límite guardado',
+
+                text: 'Nuevo límite: ' + limite + ' kWh',
+
+                icon: 'success',
+
+                confirmButtonColor: '#00c853'
+
+            });
+
+        }
+
+        function activarClima(){
+
+            Swal.fire({
+
+                title: 'Clima automático activado',
+
+                text: 'La función fue habilitada',
+
+                icon: 'success',
+
+                confirmButtonColor: '#00c853'
+
+            });
+
+        }
+
+    </script>
 </body>
 </html>

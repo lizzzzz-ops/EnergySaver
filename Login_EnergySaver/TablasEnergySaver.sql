@@ -39,7 +39,12 @@ CREATE TABLE Dispositivos
     fechaRegistro DATETIME2 DEFAULT SYSDATETIME()
 );
 SELECT * FROM Dispositivos;
-
+ALTER TABLE Dispositivos
+ADD id_usuario INT NULL;
+ALTER TABLE Dispositivos
+ADD CONSTRAINT FK_Dispositivos_Usuario
+FOREIGN KEY (id_usuario)
+REFERENCES Usuario(id_usuario);
 -- =========================
 -- TABLA: Consumo
 -- =========================
@@ -87,6 +92,11 @@ CREATE TABLE Configuracion (
     HoraInicio VARCHAR(10),
     HoraFin VARCHAR(10)
 );
+ALTER TABLE Configuracion
+ADD LimiteConsumo FLOAT;
+
+ALTER TABLE Configuracion
+DROP COLUMN ClimaAutomatico;
 select * from Configuracion;
 
 INSERT INTO Usuario (nombre, correo, contraseña, estado)

@@ -34,11 +34,11 @@
             text-decoration: none;
             font-size: 14px;
             transition: .3s;
-            box-shadow: 0 0 10px rgba(46,204,113,.6);
+            box-shadow: 0 0 15px rgba(0,200,83,.9);
         }
 
             .btn-inicio:hover {
-                background: #2ecc71;
+                background: #00c853;
             }
 
         .container {
@@ -65,11 +65,12 @@
             box-shadow: 0 5px 15px rgba(0,0,0,.15);
         }
 
-            /* EFECTO VERDE */
+            /* EFECTO VERDE FUERTE */
             .accordion:hover,
             .active {
-                background: #2ecc71 !important;
+                background: #00c853 !important;
                 color: white !important;
+                box-shadow: 0 0 20px rgba(0,200,83,1);
             }
 
         /* PANEL */
@@ -86,12 +87,17 @@
             .panel button {
                 margin: 5px;
                 padding: 10px 15px;
-                background: #2ecc71;
+                background: #00c853;
                 border: none;
                 color: white;
                 border-radius: 8px;
                 cursor: pointer;
+                transition: .3s;
             }
+
+                .panel button:hover {
+                    background: #00e676;
+                }
 
             .panel input {
                 width: 100%;
@@ -102,6 +108,7 @@
             }
 
     </style>
+
 </head>
 
 <body>
@@ -237,7 +244,6 @@
         }
 
     </script>
-
 
 </body>
 </html>

@@ -6,7 +6,7 @@ namespace EnergySaver.Models
     [Table("Configuracion")]
     public class Configuracion
     {
-        [Key]
+       [Key]
         public int Id { get; set; }
 
         public decimal? TarifaCFE { get; set; }
@@ -16,5 +16,8 @@ namespace EnergySaver.Models
         public string? HoraInicio { get; set; }
 
         public string? HoraFin { get; set; }
+
+        public double? LimiteConsumo { get; set; }
     }
 }
+

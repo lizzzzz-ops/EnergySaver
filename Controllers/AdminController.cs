@@ -412,5 +412,13 @@ namespace EnergySaver.Controllers
 
             return RedirectToAction("ConsultarHorarios");
         }
+        public IActionResult LimiteConsumo()
+        {
+            var limites = _context.Configuracion.ToList();
+
+            return View(limites);
+        }
+
+        
     }
 }
