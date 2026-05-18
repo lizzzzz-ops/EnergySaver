@@ -1,0 +1,136 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <title>Comparar Meses</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI';
+            background: linear-gradient(135deg,#0b3d2e,#198754,#20c997);
+            min-height: 100vh;
+            padding: 40px;
+            color: white;
+        }
+
+        .btn {
+            background: rgba(255,255,255,.2);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <a href="/Admin/Dashboard"
+       class="btn">
+
+        ⬅ Volver
+
+    </a>
+
+    <h1>
+        📊 Comparar Meses
+    </h1>
+
+    <div class="card">
+
+        <canvas id="grafica"></canvas>
+
+    </div>
+
+    <script>
+
+        const ctx =
+            document.getElementById('grafica');
+
+        new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: [
+                    'Mes Anterior',
+                    'Mes Actual'
+                ],
+
+                datasets: [{
+
+                    label: 'Consumo kWh',
+
+                    data: [
+                        @ViewBag.MesAnterior,
+                        @ViewBag.MesActual
+                    ],
+
+                    backgroundColor: [
+                        '#14532d',
+                        '#22c55e'
+                    ],
+
+                    borderRadius: 10
+
+                }]
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        labels: {
+
+                            color: '#000'
+                        }
+                    }
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

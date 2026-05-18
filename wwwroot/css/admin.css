@@ -1,0 +1,73 @@
+﻿.dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.accordion-card {
+    background: rgba(255,255,255,.95);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+}
+
+.accordion-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 22px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: 700;
+    color: #14532d;
+    transition: .3s;
+}
+
+    .accordion-btn:hover {
+        background: #f4f4f4;
+    }
+
+    .accordion-btn span {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+.arrow {
+    transition: .3s;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .4s ease;
+    background: #fafafa;
+}
+
+    .accordion-content a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 25px;
+        text-decoration: none;
+        color: #198754;
+        font-weight: 600;
+        border-top: 1px solid #eee;
+        transition: .3s;
+    }
+
+        .accordion-content a:hover {
+            background: #198754;
+            color: white;
+        }
+
+.accordion-card.active .accordion-content {
+    max-height: 300px;
+}
+
+.accordion-card.active .arrow {
+    transform: rotate(180deg);
+}

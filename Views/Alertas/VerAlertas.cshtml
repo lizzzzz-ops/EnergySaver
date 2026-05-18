@@ -1,0 +1,99 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Alertas</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI';
+            background: linear-gradient(135deg,#0b3d2e,#198754,#20c997);
+            min-height: 100vh;
+            padding: 40px;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            color: #14532d;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 700px;
+            margin: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,.2);
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        .alerta {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .danger {
+            border-left: 8px solid #dc3545;
+        }
+
+        .warning {
+            border-left: 8px solid #ffc107;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+            background: rgba(0,0,0,.2);
+            padding: 12px 18px;
+            border-radius: 12px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <a href="/Admin/Dashboard">
+        ⬅ Volver
+    </a>
+
+    <br />
+    <br />
+    <br />
+
+    <div class="card">
+
+        <h1>
+            ⚠️ Alertas del Sistema
+        </h1>
+
+        <div class="alerta warning">
+            ⚡ Consumo elevado detectado
+        </div>
+
+        <div class="alerta danger">
+            🔥 Dispositivo sobrecalentado
+        </div>
+
+        <div class="alerta warning">
+            💡 Uso excesivo en horario nocturno
+        </div>
+
+    </div>
+
+</body>
+
+</html>

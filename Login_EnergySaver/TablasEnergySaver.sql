@@ -58,6 +58,14 @@ CREATE TABLE Consumo (
         FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
         FOREIGN KEY (id_dispositivo) REFERENCES Dispositivo(id_dispositivo)
 );
+INSERT INTO Consumo
+(id_consumo, id_usuario, id_dispositivo, fecha, valor)
+
+VALUES
+(1, 1, 1, '2025-07-05', 120),
+(2, 1, 1, '2025-07-10', 90),
+(3, 1, 1, '2025-08-02', 180),
+(4, 1, 1, '2025-08-08', 150);
 
 -- =========================
 -- TABLA: Alerta
@@ -108,3 +116,17 @@ select * from Configuracion;
 INSERT INTO Usuario (nombre, correo, contraseña, estado)
 VALUES ('Admin', 'admin@gmail.com', '1234', 'Admin');
 
+SELECT * FROM Usuario;
+SELECT * FROM Dispositivos;
+
+INSERT INTO Consumo
+(id_consumo, id_usuario, id_dispositivo, fecha, valor)
+
+VALUES
+(1, 4, 1, '2025-07-05', 120),
+
+(2, 4, 1, '2025-07-10', 90),
+
+(3, 4, 1, '2025-08-02', 180),
+
+(4, 4, 1, '2025-08-08', 150);

@@ -37,11 +37,15 @@ namespace EnergySaver.Controllers
                 HttpContext.Session.SetInt32("UsuarioId", user.IdUsuario);
                 HttpContext.Session.SetString("UsuarioNombre", user.Nombre);
                 HttpContext.Session.SetString("UsuarioRol", user.Rol);
-
-                if (user.Rol == "Admin")
+                if (
+                    user.Rol.Trim().ToLower() == "admin" ||
+                    user.Rol.Trim().ToLower() == "administrador"
+                   )
+                {
                     return RedirectToAction("Dashboard", "Admin");
-                else
-                    return RedirectToAction("Usuario", "Home");
+                }
+
+                return RedirectToAction("Usuario", "Home");
             }
 
             ViewBag.Error = "Correo o contraseña incorrectos, inténtelo nuevamente";

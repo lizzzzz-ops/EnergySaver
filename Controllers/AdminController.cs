@@ -20,7 +20,12 @@ namespace EnergySaver.Controllers
 
         public IActionResult Dashboard()
         {
-            return View();
+            
+        
+          var usuarios = _context.Usuarios.ToList();
+
+          return View(usuarios);
+        
         }
 
         // =========================

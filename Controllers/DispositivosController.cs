@@ -53,9 +53,9 @@ namespace EnergySaver.Controllers
             _context.SaveChanges();
 
             // 3. Redirigir asegurando que solo el que sea "Admin" vaya al Index corporativo
-            if (rol.Trim().Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            if (rol?.Trim().ToLower() == "admin")
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Dashboard", "Admin");
             }
             else
             {

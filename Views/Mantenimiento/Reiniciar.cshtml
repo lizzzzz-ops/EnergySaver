@@ -1,0 +1,131 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Reiniciar Sistema</title>
+
+    <!-- SWEET ALERT -->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI';
+            background: linear-gradient(135deg,#0b3d2e,#198754,#20c997);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.2);
+        }
+
+        h1 {
+            color: #14532d;
+        }
+
+        p {
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        button {
+            background: #198754;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: .3s;
+        }
+
+            button:hover {
+                background: #146c43;
+                transform: scale(1.05);
+            }
+
+        a {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            background: rgba(0,0,0,.2);
+            padding: 12px 18px;
+            border-radius: 12px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <a href="/Admin/Dashboard">
+        ⬅ Volver
+    </a>
+
+    <div class="card">
+
+        <h1>
+            🔄 Reiniciar Sistema
+        </h1>
+
+        <p>
+            Simulación de reinicio del sistema EnergySaver.
+        </p>
+
+        <button onclick="reiniciar()">
+            Reiniciar
+        </button>
+
+    </div>
+
+    <script>
+
+        function reiniciar() {
+
+            Swal.fire({
+
+                title: 'Sistema reiniciado 🔄',
+
+                text: 'Todos los servicios fueron reiniciados.',
+
+                icon: 'success',
+
+                confirmButtonColor: '#198754',
+
+                background: '#ffffff',
+
+                color: '#14532d',
+
+                confirmButtonText: 'Aceptar',
+
+                timer: 3000,
+
+                timerProgressBar: true
+
+            });
+
+        }
+
+    </script>
+
+</body>
+
+</html>

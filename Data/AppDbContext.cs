@@ -17,5 +17,6 @@ namespace EnergySaver.Data
         public DbSet<Configuracion> Configuracion { get; set; }
 
         public DbSet<Consumo> Consumos { get; set; }  // ← AGREGA
+        public DbSet<Consumo> Consumo { get; set; }
     }
 }

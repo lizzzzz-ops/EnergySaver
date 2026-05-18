@@ -1,0 +1,127 @@
+﻿@model List<EnergySaver.Models.Consumo>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Consumo Total</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI';
+            background: linear-gradient(135deg,#0b3d2e,#198754,#20c997);
+            padding: 40px;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            color: black;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #198754;
+            color: white;
+            padding: 14px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,.2);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <a href="/Admin/Dashboard"
+       class="btn">
+
+        ⬅ Volver
+
+    </a>
+
+    <h1>
+        📈 Consumo Total
+    </h1>
+
+    <div class="card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Usuario</th>
+
+                    <th>Dispositivo</th>
+
+                    <th>Fecha</th>
+
+                    <th>Consumo</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.id_consumo</td>
+
+                        <td>@item.id_usuario</td>
+
+                        <td>@item.id_dispositivo</td>
+
+                        <td>@item.fecha</td>
+
+                        <td>@item.valor kWh</td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</body>
+
+</html>

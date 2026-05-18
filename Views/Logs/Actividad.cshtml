@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Actividad</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI';
+            background: linear-gradient(135deg,#0b3d2e,#198754,#20c997);
+            min-height: 100vh;
+            padding: 40px;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            color: #14532d;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #198754;
+            color: white;
+            padding: 15px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .btn {
+            background: rgba(255,255,255,.2);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <a href="/Admin/Dashboard"
+       class="btn">
+
+        ⬅ Volver
+
+    </a>
+
+    <h1>
+        📋 Actividad del Sistema
+    </h1>
+
+    <div class="card">
+
+        <table>
+
+            <tr>
+                <th>Usuario</th>
+                <th>Actividad</th>
+                <th>Fecha</th>
+            </tr>
+
+            <tr>
+                <td>Admin</td>
+                <td>Agregó dispositivo</td>
+                <td>@DateTime.Now</td>
+            </tr>
+
+            <tr>
+                <td>Michelle</td>
+                <td>Inició sesión</td>
+                <td>@DateTime.Now</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</body>
+</html>
