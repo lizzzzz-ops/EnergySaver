@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Login_EnergySaver": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:55341;http://localhost:55342"
+    }
+  }
+}
