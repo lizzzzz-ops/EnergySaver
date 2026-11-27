@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel Administrador - EnergySaver</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg,#0b3d2e,#198754,#20c997);
+            min-height: 100vh;
+            color: white;
+        }
+        .top-actions {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn-login {
+            background: rgba(0,0,0,.35);
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: .3s;
+            border: 1px solid rgba(255,255,255,.15);
+        }
+        .btn-login:hover { background: rgba(255,255,255,.25); color: white; transform: translateY(-2px); }
+
+        .header {
+            margin: 20px;
+            margin-top: 85px;
+            background: rgba(0,0,0,.18);
+            padding: 22px 30px;
+            border-radius: 20px;
+            font-size: 34px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,.15);
+            color: #ffffff;
+        }
+
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+        .menu-card {
+            background: rgba(255,255,255,.15);
+            border: none;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: .3s;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0,0,0,.12);
+        }
+        .menu-card:hover { background: rgba(255,255,255,.28); transform: translateY(-2px); }
+        .menu-card.active { background: rgba(255,255,255,.35); border: 1px solid rgba(255,255,255,.25); }
+        .menu-card i { font-size: 18px; }
+
+        .content-panel {
+            display: none;
+            margin: 0 20px 20px 20px;
+            background: rgba(255,255,255,.97);
+            border-radius: 22px;
+            padding: 22px;
+            color: #14532d;
+            animation: fade .3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,.15);
+        }
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-panel a.action-link {
+            display: block;
+            background: #f4f4f4;
+            padding: 16px 18px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            text-decoration: none;
+            color: #14532d;
+            font-weight: 600;
+            transition: .3s;
+            cursor: pointer;
+        }
+        .content-panel a.action-link:hover {
+            background: #198754;
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .usuarios-icon { color: #7c3aed; }
+        .dispositivos-icon { color: #f59e0b; }
+        .config-icon { color: #0ea5e9; }
+        .limites-icon { color: #ef4444; }
+        .reportes-icon { color: #10b981; }
+        .logs-icon { color: #6366f1; }
+        .mantenimiento-icon { color: #f97316; }
+        .alertas-icon { color: #dc2626; }
+
+        @media(max-width:768px) {
+            .menu-container { flex-direction: column; }
+            .menu-card { width: 100%; }
+            .header { font-size: 26px; margin-top: 110px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-actions">
+        <a href="index.html" class="btn-login">⬅️ Regresar al Login</a>
+        <a href="usuario.html" class="btn-login">👤 Ver Panel Usuario</a>
+    </div>
+
+    <div class="header">⚡ Panel Administrador</div>
+
+    <div class="menu-container">
+        <button class="menu-card active" onclick="showPanel('usuarios', this)">
+            <i class="bi bi-people-fill usuarios-icon"></i> Usuarios
+        </button>
+        <button class="menu-card" onclick="showPanel('dispositivos', this)">
+            <i class="bi bi-cpu-fill dispositivos-icon"></i> Dispositivos
+        </button>
+        <button class="menu-card" onclick="showPanel('configuracion', this)">
+            <i class="bi bi-gear-fill config-icon"></i> Configuración
+        </button>
+        <button class="menu-card" onclick="showPanel('reglas', this)">
+            <i class="bi bi-sliders limites-icon"></i> Límites
+        </button>
+        <button class="menu-card" onclick="showPanel('reportes', this)">
+            <i class="bi bi-bar-chart-fill reportes-icon"></i> Reportes
+        </button>
+        <button class="menu-card" onclick="showPanel('logs', this)">
+            <i class="bi bi-journal-text logs-icon"></i> Logs
+        </button>
+        <button class="menu-card" onclick="showPanel('mantenimiento', this)">
+            <i class="bi bi-tools mantenimiento-icon"></i> Mantenimiento
+        </button>
+        <button class="menu-card" onclick="showPanel('alertas', this)">
+            <i class="bi bi-bell-fill alertas-icon"></i> Alertas
+        </button>
+    </div>
+
+    <!-- USUARIOS -->
+    <div id="usuarios" class="content-panel" style="display:block;">
+        <h4 class="fw-bold mb-3">Gestión de Usuarios</h4>
+        <div class="table-responsive mb-3">
+            <table class="table table-hover align-middle">
+                <thead class="table-success">
+                    <tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Administrador Principal</td><td>admin@energysaver.com</td><td><span class="badge bg-dark">Admin</span></td><td><span class="badge bg-success">Activo</span></td></tr>
+                    <tr><td>2</td><td>Usuario Hogar 1</td><td>usuario@energysaver.com</td><td><span class="badge bg-primary">Usuario</span></td><td><span class="badge bg-success">Activo</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <a class="action-link" onclick="mostrarDetalle('Formulario de registro de nuevo usuario habilitado.')">➕ Crear usuario</a>
+    </div>
+
+    <!-- DISPOSITIVOS -->
+    <div id="dispositivos" class="content-panel">
+        <h4 class="fw-bold mb-3">Control Global de Dispositivos</h4>
+        <a class="action-link" href="usuario.html">💡 Ir a inventario interactivo de dispositivos</a>
+        <a class="action-link" onclick="mostrarDetalle('Todos los medidores inteligentes están sincronizados correctamente.')">📡 Verificar estado de red IoT</a>
+    </div>
+
+    <!-- CONFIG -->
+    <div id="configuracion" class="content-panel">
+        <h4 class="fw-bold mb-3">Configuración de Tarifas y Horarios</h4>
+        <div class="row g-3 mb-3">
+            <div class="col-md-4"><div class="p-3 bg-light rounded-3"><strong>Tarifa Base CFE:</strong> $2.50 MXN / kWh</div></div>
+            <div class="col-md-4"><div class="p-3 bg-light rounded-3"><strong>IVA Aplicado:</strong> 16%</div></div>
+            <div class="col-md-4"><div class="p-3 bg-light rounded-3"><strong>Horario Punta:</strong> 18:00 - 22:00 hrs</div></div>
+        </div>
+        <a class="action-link" onclick="mostrarDetalle('Tarifa actualizada en el sistema.')">💰 Cambiar tarifa</a>
+        <a class="action-link" onclick="mostrarDetalle('Configuración de impuestos guardada.')">🧾 Impuestos</a>
+        <a class="action-link" onclick="mostrarDetalle('Horarios tarifarios actualizados.')">🕒 Horarios</a>
+    </div>
+
+    <!-- LIMITES -->
+    <div id="reglas" class="content-panel">
+        <h4 class="fw-bold mb-3">Límites de Consumo</h4>
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Límite máximo mensual por hogar (kWh):</label>
+            <div class="input-group" style="max-width:350px">
+                <input type="number" id="inputLimite" class="form-control" value="150">
+                <button class="btn btn-success" onclick="mostrarDetalle('Límite actualizado a ' + document.getElementById('inputLimite').value + ' kWh')">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REPORTES -->
+    <div id="reportes" class="content-panel">
+        <h4 class="fw-bold mb-3">Reportes Generales</h4>
+        <a class="action-link" href="usuario.html">📈 Ver gráficas de consumo total y comparativa mensual</a>
+        <a class="action-link" onclick="mostrarDetalle('Archivo Excel de consumo generado exitosamente.')">📤 Exportar Excel</a>
+    </div>
+
+    <!-- LOGS -->
+    <div id="logs" class="content-panel">
+        <h4 class="fw-bold mb-3">Bitácora del Sistema (Logs)</h4>
+        <ul class="list-group">
+            <li class="list-group-item">✅ Inicio de sesión exitoso — admin@energysaver.com (Hoy 11:40 AM)</li>
+            <li class="list-group-item">⚡ Actualización de tarifa CFE a $2.50/kWh</li>
+            <li class="list-group-item">🔌 Dispositivo "Aire Acondicionado Inverter" encendido</li>
+        </ul>
+    </div>
+
+    <!-- MANTENIMIENTO -->
+    <div id="mantenimiento" class="content-panel">
+        <h4 class="fw-bold mb-3">Mantenimiento del Sistema</h4>
+        <a class="action-link" onclick="mostrarDetalle('Servicios reiniciados correctamente sin pérdida de datos.')">🔄 Reiniciar sistema</a>
+        <a class="action-link" onclick="mostrarDetalle('4 de 4 medidores en línea con señal óptima.')">📡 Medidores</a>
+        <a class="action-link" onclick="mostrarDetalle('EnergySaver ya cuenta con la versión más reciente v2.6.')">⬆️ Actualizar sistema</a>
+    </div>
+
+    <!-- ALERTAS -->
+    <div id="alertas" class="content-panel">
+        <h4 class="fw-bold mb-3">Alertas y Fallas Técnicas</h4>
+        <div class="alert alert-warning">⚠️ <strong>Alto consumo detectado:</strong> Hogar #2 superó el 80% de su meta mensual.</div>
+        <div class="alert alert-danger mb-0">🚨 <strong>Falla técnica:</strong> Pérdida temporal de señal en medidor de Cocina (resuelto).</div>
+    </div>
+
+    <div id="toastAdmin" style="display:none;position:fixed;bottom:20px;right:20px;background:#14532d;color:#fff;padding:14px 20px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.3);z-index:9999"></div>
+
+    <script>
+        function showPanel(panelId, buttonElement) {
+            document.querySelectorAll(".content-panel").forEach(panel => panel.style.display = "none");
+            document.querySelectorAll(".menu-card").forEach(btn => btn.classList.remove("active"));
+            document.getElementById(panelId).style.display = "block";
+            buttonElement.classList.add("active");
+        }
+
+        function mostrarDetalle(texto) {
+            const toast = document.getElementById("toastAdmin");
+            toast.textContent = "✅ " + texto;
+            toast.style.display = "block";
+            setTimeout(() => { toast.style.display = "none"; }, 3000);
+        }
+    </script>
+</body>
+</html>
