@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Login_EnergySaver\obj\**" />
+    <Content Remove="Login_EnergySaver\obj\**" />
+    <EmbeddedResource Remove="Login_EnergySaver\obj\**" />
+    <None Remove="Login_EnergySaver\obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Program.cs" />
   </ItemGroup>
 
@@ -21,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="itext7" Version="9.6.0" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="9.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
