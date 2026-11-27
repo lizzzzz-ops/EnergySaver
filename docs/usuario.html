@@ -1,1 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EnergySaver - Usuario</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #1a5b3e; color: #fff; padding: 1.5rem; }
 
+        .header {
+            background: linear-gradient(135deg, #1e7d50, #0f4c2f);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header h1 { font-size: 22px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+        .btn-back {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.28); }
+
+        .nav { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .nav-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all .2s;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.2); }
+        .nav-btn.active { background: rgba(255,255,255,0.28); font-weight: 600; }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .card { background: #fff; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; color: #000; }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+
+        .metric-card { background: #fff; border-radius: 10px; padding: 1rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .metric-card .label { font-size: 13px; color: #666; margin-bottom: 6px; }
+        .metric-card .value { font-size: 28px; font-weight: 600; color: #1a5b3e; }
+        .metric-card .icon { font-size: 32px; margin-bottom: 8px; }
+        .metric-card .sub { font-size: 11px; color: #999; margin-top: 4px; }
+
+        .progress-bar { background: #e9ecef; border-radius: 10px; height: 8px; margin-top: 8px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #1a5b3e, #2ecc71); height: 100%; border-radius: 10px; width: 0%; transition: width 1s ease; }
+
+        .device-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; }
+        .device-info { flex: 1; }
+        .device-name { font-weight: 500; font-size: 15px; margin-bottom: 4px; }
+        .device-consumption { font-size: 13px; color: #666; }
+
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; transition: .3s; border-radius: 26px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #fff; transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background: #1a5b3e; }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .chart-container { background: #fff; border-radius: 12px; padding: 1.5rem; height: 280px; position: relative; }
+        .add-btn { background: #1a5b3e; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all .2s; text-decoration: none; }
+        .add-btn:hover { background: #0f4c2f; transform: translateY(-1px); }
+
+        .alert-card { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; }
+        .alert-card .alert-title { font-weight: 600; color: #856404; margin-bottom: 4px; }
+        .alert-card .alert-text { font-size: 14px; color: #856404; }
+
+        .profile-section { background: #fff; border-radius: 12px; padding: 1.5rem; color: #000; }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; background: #1a5b3e; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 500; margin: 0 auto 1rem; }
+        .profile-info { text-align: center; margin-bottom: 1.5rem; }
+        .profile-name { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+        .profile-email { color: #666; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 1.5rem; }
+        .stat-item { background: #f8f9fa; padding: 12px; border-radius: 8px; text-align: center; }
+        .stat-label { font-size: 12px; color: #666; margin-bottom: 4px; }
+        .stat-value { font-size: 18px; font-weight: 600; color: #1a5b3e; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <span style="font-size:28px">⚡</span>
+            <h1>Panel de Usuario — EnergySaver</h1>
+        </div>
+        <div style="display:flex;gap:8px">
+            <a href="admin.html" class="btn-back">🛡️ Ir a Admin</a>
+            <a href="index.html" class="btn-back">⬅️ Salir</a>
+        </div>
+    </div>
+
+    <div class="nav">
+        <button class="nav-btn active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+        <button class="nav-btn" onclick="showSection('control',this)">💡 Control</button>
+        <button class="nav-btn" onclick="showSection('reportes',this)">📈 Reportes</button>
+        <button class="nav-btn" onclick="showSection('horarios',this)">🕐 Horarios</button>
+        <button class="nav-btn" onclick="showSection('alertas',this)">🔔 Alertas</button>
+        <button class="nav-btn" onclick="showSection('perfil',this)">👤 Perfil</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="section active">
+        <div class="cards-grid">
+            <div class="metric-card">
+                <div class="icon">💡</div>
+                <div class="label">Consumo del mes</div>
+                <div class="value">124 kWh</div>
+                <div class="sub">Anterior: 142 kWh</div>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            </div>
+            <div class="metric-card">
+                <div class="icon">💰</div>
+                <div class="label">Gasto estimado</div>
+                <div class="value">$310</div>
+                <div class="sub">Tarifa: $2.50/kWh</div>
+            </div>
+            <div class="metric-card">
+                <div class="icon">⚡</div>
+                <div class="label">Dispositivos activos</div>
+                <div class="value" id="dashActivos">3/4</div>
+                <div class="sub">4 registrados</div>
+            </div>
+        </div>
+        <div class="chart-container" style="margin-bottom:1rem">
+            <div style="font-size:15px;font-weight:600;color:#333;margin-bottom:1rem">📊 Consumo últimos 7 días</div>
+            <div style="height:200px;position:relative"><canvas id="chartCanvas"></canvas></div>
+        </div>
+        <div class="card">
+            <div style="font-size:15px;font-weight:600;color:#333;margin-bottom:1rem">📈 Comparativa mes actual vs anterior</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div style="background:#f8f9fa;padding:14px;border-radius:10px;text-align:center">
+                    <div style="font-size:12px;color:#666;margin-bottom:6px">Este mes</div>
+                    <div style="font-size:22px;font-weight:600;color:#1a5b3e">124 kWh</div>
+                </div>
+                <div style="background:#f8f9fa;padding:14px;border-radius:10px;text-align:center">
+                    <div style="font-size:12px;color:#666;margin-bottom:6px">Mes anterior</div>
+                    <div style="font-size:22px;font-weight:600;color:#27ae60">142 kWh</div>
+                </div>
+            </div>
+            <p style="text-align:center;margin-top:1rem;font-size:13px;color:#555">✅ Ahorraste 18 kWh respecto al mes pasado</p>
+        </div>
+    </div>
+
+    <!-- CONTROL -->
+    <div id="control" class="section">
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+                <h3 style="font-size:18px;font-weight:500">Mis dispositivos</h3>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button onclick="apagarTodo()" style="display:flex;align-items:center;gap:6px;background:#e74c3c;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer">
+                        ⚡ Apagar todo
+                    </button>
+                    <button onclick="activarModoEliminar()" id="btnEliminar" style="display:flex;align-items:center;gap:6px;background:#e67e22;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer">
+                        🗑️ Eliminar
+                    </button>
+                    <button onclick="abrirModalDispositivo()" style="display:flex;align-items:center;gap:6px;background:#1a5b3e;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer">
+                        ＋ Agregar
+                    </button>
+                </div>
+            </div>
+
+            <div id="bannerEliminar" style="display:none;background:#fff3cd;border-left:4px solid #e67e22;padding:10px 14px;border-radius:8px;margin-bottom:1rem;font-size:13px;color:#856404;align-items:center;gap:8px">
+                ⚠️ Haz clic en <strong>🗑️ Eliminar</strong> del dispositivo que deseas borrar.
+                <button onclick="desactivarModoEliminar()" style="margin-left:auto;background:#856404;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer">
+                    Cancelar
+                </button>
+            </div>
+
+            <input type="text" id="buscadorDispositivo" oninput="filtrarDispositivos(this.value)" placeholder="🔍 Buscar dispositivo..." style="width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:1rem">
+
+            <div id="listaDispositivos">
+                <div class="device-item" data-nombre="refrigerador samsung" data-estado="Activo" data-watts="1000">
+                    <div class="device-info">
+                        <div class="device-name">🔌 Refrigerador Samsung</div>
+                        <div class="device-consumption">Electrodoméstico — 1000 W — Cocina</div>
+                        <div style="margin-top:4px">
+                            <span class="badge-estado" style="font-size:12px;padding:3px 8px;border-radius:20px;background:#d4edda;color:#155724">Activo</span>
+                            <span style="font-size:12px;color:#999;margin-left:8px">💰 Costo/h: $2.5000</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <button class="btn-del-dispositivo" onclick="eliminarDispositivo(this)" style="display:none;background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer">🗑️ Eliminar</button>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                            <label class="switch"><input type="checkbox" checked onchange="toggleDevice(this)"><span class="slider"></span></label>
+                            <span class="lbl-estado" style="font-size:11px;color:#999">Encendido</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="device-item" data-nombre="aire acondicionado" data-estado="Activo" data-watts="1500">
+                    <div class="device-info">
+                        <div class="device-name">🔌 Aire Acondicionado Inverter</div>
+                        <div class="device-consumption">Climatización — 1500 W — Sala</div>
+                        <div style="margin-top:4px">
+                            <span class="badge-estado" style="font-size:12px;padding:3px 8px;border-radius:20px;background:#d4edda;color:#155724">Activo</span>
+                            <span style="font-size:12px;color:#999;margin-left:8px">💰 Costo/h: $3.7500</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <button class="btn-del-dispositivo" onclick="eliminarDispositivo(this)" style="display:none;background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer">🗑️ Eliminar</button>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                            <label class="switch"><input type="checkbox" checked onchange="toggleDevice(this)"><span class="slider"></span></label>
+                            <span class="lbl-estado" style="font-size:11px;color:#999">Encendido</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="device-item" data-nombre="smart tv 55" data-estado="Activo" data-watts="200">
+                    <div class="device-info">
+                        <div class="device-name">🔌 Smart TV 55"</div>
+                        <div class="device-consumption">Entretenimiento — 200 W — Recámara</div>
+                        <div style="margin-top:4px">
+                            <span class="badge-estado" style="font-size:12px;padding:3px 8px;border-radius:20px;background:#d4edda;color:#155724">Activo</span>
+                            <span style="font-size:12px;color:#999;margin-left:8px">💰 Costo/h: $0.5000</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <button class="btn-del-dispositivo" onclick="eliminarDispositivo(this)" style="display:none;background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer">🗑️ Eliminar</button>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                            <label class="switch"><input type="checkbox" checked onchange="toggleDevice(this)"><span class="slider"></span></label>
+                            <span class="lbl-estado" style="font-size:11px;color:#999">Encendido</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="device-item" data-nombre="microondas lg" data-estado="Inactivo" data-watts="1200">
+                    <div class="device-info">
+                        <div class="device-name">🔌 Microondas LG</div>
+                        <div class="device-consumption">Cocina — 1200 W — Cocina</div>
+                        <div style="margin-top:4px">
+                            <span class="badge-estado" style="font-size:12px;padding:3px 8px;border-radius:20px;background:#f8d7da;color:#721c24">Inactivo</span>
+                            <span style="font-size:12px;color:#999;margin-left:8px">💰 Costo/h: $3.0000</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <button class="btn-del-dispositivo" onclick="eliminarDispositivo(this)" style="display:none;background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer">🗑️ Eliminar</button>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                            <label class="switch"><input type="checkbox" onchange="toggleDevice(this)"><span class="slider"></span></label>
+                            <span class="lbl-estado" style="font-size:11px;color:#999">Apagado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:1rem;padding:12px;background:#f8f9fa;border-radius:8px;display:flex;justify-content:space-between">
+                <div style="text-align:center"><div style="font-size:12px;color:#666">Total</div><div id="res-total" style="font-size:18px;font-weight:600;color:#1a5b3e">4</div></div>
+                <div style="text-align:center"><div style="font-size:12px;color:#666">Activos</div><div id="res-activos" style="font-size:18px;font-weight:600;color:#27ae60">3</div></div>
+                <div style="text-align:center"><div style="font-size:12px;color:#666">Apagados</div><div id="res-apagados" style="font-size:18px;font-weight:600;color:#e74c3c">1</div></div>
+                <div style="text-align:center"><div style="font-size:12px;color:#666">Costo total/h</div><div id="res-costo" style="font-size:18px;font-weight:600;color:#1a5b3e">$6.7500</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REPORTES -->
+    <div id="reportes" class="section">
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:1rem">
+                <h3 style="font-size:18px;font-weight:500">📊 Reporte de consumo</h3>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button onclick="window.print()" style="background:#e74c3c;color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer">📥 Descargar PDF</button>
+                    <button onclick="alert('Reporte enviado al correo registrado exitosamente.')" style="background:#3498db;color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer">📧 Enviar Email</button>
+                </div>
+            </div>
+            <div style="margin-bottom:1rem">
+                <select id="periodoSelect" onchange="cambiarPeriodo()" style="padding:10px;border-radius:8px;border:1px solid #ddd">
+                    <option value="dia">Hoy</option>
+                    <option value="semana">Semana</option>
+                    <option value="mes" selected>Mes</option>
+                </select>
+            </div>
+            <div class="chart-container"><canvas id="reportChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- HORARIOS -->
+    <div id="horarios" class="section">
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                <h3>🕐 Horarios programados</h3>
+                <button class="add-btn" onclick="abrirModalHorario()"><span>+</span> Agregar</button>
+            </div>
+            <div id="listaHorarios">
+                <div class="device-item">
+                    <div class="device-info">
+                        <div class="device-name">☕ Cafetera</div>
+                        <div class="device-consumption">Lun-Vie | 06:00 AM</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <label class="switch"><input checked type="checkbox"><span class="slider"></span></label>
+                        <button onclick="eliminarHorario(this)" style="border:none;background:#e74c3c;color:white;padding:8px;border-radius:6px;cursor:pointer">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALERTAS -->
+    <div id="alertas" class="section">
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                <h3 style="font-size:18px;font-weight:500">🔔 Alertas</h3>
+                <div style="background:#e74c3c;color:white;padding:6px 12px;border-radius:20px;font-size:13px">
+                    Sin leer: <span id="contadorAlertas">2</span>
+                </div>
+            </div>
+            <div id="listaAlertas">
+                <div class="alert-card alerta-item">
+                    <div class="alert-title">⚠️ Alto consumo detectado</div>
+                    <div class="alert-text">Consumo actual: 180 kWh</div>
+                    <div style="margin-top:10px">
+                        <button onclick="marcarLeida(this)" style="background:#1a5b3e;color:white;border:none;padding:8px;border-radius:6px;cursor:pointer">✓ Leída</button>
+                        <button onclick="eliminarAlerta(this)" style="background:#e74c3c;color:white;border:none;padding:8px;border-radius:6px;cursor:pointer">🗑️ Eliminar</button>
+                    </div>
+                </div>
+                <div class="alert-card alerta-item">
+                    <div class="alert-title">🔌 Dispositivo desconectado</div>
+                    <div class="alert-text">Refrigerador desconectado</div>
+                    <div style="margin-top:10px">
+                        <button onclick="marcarLeida(this)" style="background:#1a5b3e;color:white;border:none;padding:8px;border-radius:6px;cursor:pointer">✓ Leída</button>
+                        <button onclick="eliminarAlerta(this)" style="background:#e74c3c;color:white;border:none;padding:8px;border-radius:6px;cursor:pointer">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PERFIL -->
+    <div id="perfil" class="section">
+        <div class="profile-section">
+            <div style="text-align:center">
+                <div class="avatar" id="avatarUsuario">ES</div>
+                <input type="file" id="fotoPerfil" accept="image/*" onchange="cambiarAvatar(event)" style="margin-top:10px">
+            </div>
+            <div class="profile-info">
+                <div class="profile-name">Usuario EnergySaver</div>
+                <div class="profile-email">usuario@energysaver.com</div>
+            </div>
+            <div style="margin-top:20px">
+                <h3 style="margin-bottom:10px">🏆 Insignias</h3>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <div class="stat-item">🌱 Ahorrador</div>
+                    <div class="stat-item">⚡ Energía eficiente</div>
+                    <div class="stat-item">🔥 Usuario activo</div>
+                </div>
+            </div>
+            <div style="margin-top:20px">
+                <h3 style="margin-bottom:10px">🎯 Meta de ahorro</h3>
+                <input type="number" id="metaAhorro" placeholder="Ej: 150" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px">
+                <button onclick="guardarMeta()" style="margin-top:10px;width:100%;background:#1a5b3e;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer">Guardar meta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AGREGAR DISPOSITIVO -->
+    <div id="modalDispositivo" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);justify-content:center;align-items:center;z-index:999;">
+        <div style="background:white;width:90%;max-width:400px;padding:25px;border-radius:12px;color:black;">
+            <h3 style="margin-bottom:1rem">Registrar Dispositivo</h3>
+            <input id="nuevoNombre" placeholder="Nombre (ej. Ventilador)" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:6px">
+            <input id="nuevoTipo" placeholder="Tipo (ej. Climatización)" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:6px">
+            <input id="nuevoUbicacion" placeholder="Ubicación (ej. Recámara)" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:6px">
+            <input id="nuevoWatts" type="number" placeholder="Consumo en Watts (ej. 120)" style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:6px">
+            <div style="display:flex;justify-content:end;gap:10px">
+                <button onclick="cerrarModalDispositivo()" style="padding:10px;border:none;border-radius:6px;cursor:pointer">Cancelar</button>
+                <button onclick="guardarDispositivo()" style="background:#1a5b3e;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL HORARIO -->
+    <div id="modalHorario" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);justify-content:center;align-items:center;z-index:999;">
+        <div style="background:white;width:90%;max-width:400px;padding:25px;border-radius:12px;color:black;">
+            <h3 style="margin-bottom:1rem">Nuevo horario</h3>
+            <input id="dispositivoHorario" placeholder="Dispositivo" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:6px">
+            <input id="horaHorario" type="time" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:6px">
+            <input id="diasHorario" placeholder="Ej: Lun-Vie" style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:6px">
+            <div style="display:flex;justify-content:end;gap:10px">
+                <button onclick="cerrarModalHorario()" style="padding:10px;border:none;border-radius:6px;cursor:pointer">Cancelar</button>
+                <button onclick="guardarHorario()" style="background:#1a5b3e;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMACIÓN -->
+    <div id="modalConfirm" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);justify-content:center;align-items:center;z-index:1000">
+        <div style="background:#1e2d24;width:360px;padding:28px;border-radius:16px;color:#fff;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+            <div id="modalConfirmIcon" style="font-size:48px;margin-bottom:16px">⚠️</div>
+            <div id="modalConfirmTitle" style="font-size:18px;font-weight:600;margin-bottom:8px"></div>
+            <div id="modalConfirmMsg" style="font-size:14px;color:#aaa;margin-bottom:24px"></div>
+            <div style="display:flex;gap:10px;justify-content:center">
+                <button onclick="modalConfirmCancelar()" style="padding:10px 24px;border-radius:8px;border:1px solid #444;background:transparent;color:#ccc;font-size:14px;cursor:pointer">Cancelar</button>
+                <button id="modalConfirmOk" style="padding:10px 24px;border-radius:8px;border:none;background:#e74c3c;color:#fff;font-size:14px;font-weight:500;cursor:pointer">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        function showSection(id, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        setTimeout(() => {
+            const fill = document.getElementById('progressFill');
+            if (fill) fill.style.width = Math.min((124 / 150) * 100, 100) + '%';
+        }, 400);
+
+        const graficaLabels = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+        const graficaValores = [18, 21, 16, 19, 22, 15, 13];
+
+        new Chart(document.getElementById('chartCanvas').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: graficaLabels,
+                datasets: [{ label: 'Consumo (kWh)', data: graficaValores, borderColor: '#1a5b3e', backgroundColor: 'rgba(26,91,62,0.1)', tension: 0.4, fill: true, pointBackgroundColor: '#1a5b3e', pointRadius: 5 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+
+        const reportChart = new Chart(document.getElementById('reportChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: ['Sem 1','Sem 2','Sem 3','Sem 4'], datasets: [{ label: 'Consumo (kWh)', data: [42,38,45,41], backgroundColor: '#1a5b3e' }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+
+        function cambiarPeriodo() {
+            const p = document.getElementById('periodoSelect').value;
+            const datos = {
+                dia: { labels: ['6am','9am','12pm','3pm','6pm','9pm'], data: [2,3,4,3,5,2] },
+                semana: { labels: graficaLabels, data: graficaValores },
+                mes: { labels: ['Sem 1','Sem 2','Sem 3','Sem 4'], data: [42,38,45,41] }
+            };
+            reportChart.data.labels = datos[p].labels;
+            reportChart.data.datasets[0].data = datos[p].data;
+            reportChart.update();
+        }
+
+        let _confirmCallback = null;
+        function mostrarConfirm(titulo, mensaje, icono, colorBtn, callback) {
+            document.getElementById('modalConfirmTitle').textContent = titulo;
+            document.getElementById('modalConfirmMsg').textContent = mensaje;
+            document.getElementById('modalConfirmIcon').textContent = icono || '⚠️';
+            document.getElementById('modalConfirmOk').style.background = colorBtn || '#e74c3c';
+            document.getElementById('modalConfirm').style.display = 'flex';
+            _confirmCallback = callback;
+        }
+        function modalConfirmCancelar() { document.getElementById('modalConfirm').style.display = 'none'; _confirmCallback = null; }
+        document.getElementById('modalConfirmOk').addEventListener('click', function () {
+            document.getElementById('modalConfirm').style.display = 'none';
+            if (_confirmCallback) _confirmCallback();
+            _confirmCallback = null;
+        });
+
+        function actualizarResumen() {
+            const items = document.querySelectorAll('#listaDispositivos .device-item');
+            let total = items.length, activos = 0, costo = 0;
+            items.forEach(item => {
+                if (item.getAttribute('data-estado') === 'Activo') {
+                    activos++;
+                    costo += parseFloat(item.getAttribute('data-watts') || '0') / 1000 * 2.5;
+                }
+            });
+            document.getElementById('res-total').textContent = total;
+            document.getElementById('res-activos').textContent = activos;
+            document.getElementById('res-apagados').textContent = total - activos;
+            document.getElementById('res-costo').textContent = '$' + costo.toFixed(4);
+            document.getElementById('dashActivos').textContent = `${activos}/${total}`;
+        }
+
+        function toggleDevice(checkbox) {
+            const item = checkbox.closest('.device-item');
+            const nuevoEstado = checkbox.checked ? 'Activo' : 'Inactivo';
+            const badge = item.querySelector('.badge-estado');
+            const lbl = item.querySelector('.lbl-estado');
+            item.setAttribute('data-estado', nuevoEstado);
+            badge.textContent = nuevoEstado;
+            badge.style.background = nuevoEstado === 'Activo' ? '#d4edda' : '#f8d7da';
+            badge.style.color = nuevoEstado === 'Activo' ? '#155724' : '#721c24';
+            lbl.textContent = nuevoEstado === 'Activo' ? 'Encendido' : 'Apagado';
+            actualizarResumen();
+        }
+
+        function filtrarDispositivos(texto) {
+            document.querySelectorAll('#listaDispositivos .device-item').forEach(item => {
+                const nombre = item.getAttribute('data-nombre') || '';
+                item.style.display = nombre.includes(texto.toLowerCase()) ? 'flex' : 'none';
+            });
+        }
+
+        function apagarTodo() {
+            mostrarConfirm('¿Apagar todos los dispositivos?', 'Se apagarán todos los dispositivos activos.', '⚡', '#e74c3c', function () {
+                document.querySelectorAll('#listaDispositivos .switch input:checked').forEach(cb => {
+                    cb.checked = false;
+                    toggleDevice(cb);
+                });
+            });
+        }
+
+        function activarModoEliminar() {
+            document.getElementById('bannerEliminar').style.display = 'flex';
+            document.querySelectorAll('.btn-del-dispositivo').forEach(b => b.style.display = 'inline-block');
+        }
+        function desactivarModoEliminar() {
+            document.getElementById('bannerEliminar').style.display = 'none';
+            document.querySelectorAll('.btn-del-dispositivo').forEach(b => b.style.display = 'none');
+        }
+        function eliminarDispositivo(btn) {
+            const item = btn.closest('.device-item');
+            const nombre = item.querySelector('.device-name').textContent.trim();
+            mostrarConfirm('¿Eliminar dispositivo?', 'Se eliminará ' + nombre + ' permanentemente.', '🗑️', '#e74c3c', function () {
+                item.remove();
+                actualizarResumen();
+            });
+        }
+
+        function abrirModalDispositivo() { document.getElementById('modalDispositivo').style.display = 'flex'; }
+        function cerrarModalDispositivo() { document.getElementById('modalDispositivo').style.display = 'none'; }
+        function guardarDispositivo() {
+            const nombre = document.getElementById('nuevoNombre').value.trim();
+            const tipo = document.getElementById('nuevoTipo').value.trim() || 'General';
+            const ubicacion = document.getElementById('nuevoUbicacion').value.trim() || 'Hogar';
+            const watts = parseFloat(document.getElementById('nuevoWatts').value) || 0;
+            if (!nombre || watts <= 0) { alert('Completa el nombre y los Watts.'); return; }
+            const costoH = (watts / 1000 * 2.5).toFixed(4);
+            document.getElementById('listaDispositivos').innerHTML += `
+                <div class="device-item" data-nombre="${nombre.toLowerCase()}" data-estado="Activo" data-watts="${watts}">
+                    <div class="device-info">
+                        <div class="device-name">🔌 ${nombre}</div>
+                        <div class="device-consumption">${tipo} — ${watts} W — ${ubicacion}</div>
+                        <div style="margin-top:4px">
+                            <span class="badge-estado" style="font-size:12px;padding:3px 8px;border-radius:20px;background:#d4edda;color:#155724">Activo</span>
+                            <span style="font-size:12px;color:#999;margin-left:8px">💰 Costo/h: $${costoH}</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <button class="btn-del-dispositivo" onclick="eliminarDispositivo(this)" style="display:none;background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer">🗑️ Eliminar</button>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                            <label class="switch"><input type="checkbox" checked onchange="toggleDevice(this)"><span class="slider"></span></label>
+                            <span class="lbl-estado" style="font-size:11px;color:#999">Encendido</span>
+                        </div>
+                    </div>
+                </div>`;
+            cerrarModalDispositivo();
+            actualizarResumen();
+        }
+
+        function abrirModalHorario() { document.getElementById('modalHorario').style.display = 'flex'; }
+        function cerrarModalHorario() { document.getElementById('modalHorario').style.display = 'none'; }
+        function guardarHorario() {
+            const dispositivo = document.getElementById('dispositivoHorario').value;
+            const hora = document.getElementById('horaHorario').value;
+            const dias = document.getElementById('diasHorario').value;
+            if (!dispositivo || !hora) { alert('Completa todos los campos'); return; }
+            document.getElementById('listaHorarios').innerHTML += `
+                <div class="device-item">
+                    <div class="device-info">
+                        <div class="device-name">🔌 ${dispositivo}</div>
+                        <div class="device-consumption">${dias} | ${hora}</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                        <button onclick="eliminarHorario(this)" style="border:none;background:#e74c3c;color:white;padding:8px;border-radius:6px;cursor:pointer">🗑️</button>
+                    </div>
+                </div>`;
+            cerrarModalHorario();
+        }
+        function eliminarHorario(btn) {
+            mostrarConfirm('¿Eliminar horario?', 'Se eliminará este horario.', '🕐', '#e74c3c', function () { btn.closest('.device-item').remove(); });
+        }
+
+        let alertasSinLeer = 2;
+        function marcarLeida(btn) {
+            btn.innerHTML = '✓ Leída'; btn.disabled = true; btn.style.opacity = '.6';
+            if (alertasSinLeer > 0) alertasSinLeer--;
+            document.getElementById('contadorAlertas').innerText = alertasSinLeer;
+        }
+        function eliminarAlerta(btn) { btn.closest('.alerta-item').remove(); }
+
+        function cambiarAvatar(event) {
+            const archivo = event.target.files[0];
+            if (!archivo) return;
+            const lector = new FileReader();
+            lector.onload = function (e) {
+                document.getElementById('avatarUsuario').innerHTML = `<img src="${e.target.result}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">`;
+            };
+            lector.readAsDataURL(archivo);
+        }
+        function guardarMeta() {
+            const meta = document.getElementById('metaAhorro').value;
+            if (!meta) { alert('Ingresa una meta'); return; }
+            alert('Meta guardada: ' + meta + ' kWh');
+        }
+    </script>
+</body>
+</html>
